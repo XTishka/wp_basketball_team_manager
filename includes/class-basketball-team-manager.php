@@ -170,6 +170,9 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'init', $plugin_admin, 'register_games_posts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_team_posts' );
 
+		// Register metaboxes
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'game_meta_box' );
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin, 'move_game_meta_box_to_the_top' );
 	}
 
 	/**

@@ -330,4 +330,35 @@ class Basketball_Team_Manager_Admin {
 		register_post_type( 'bt-team', $args );
 	}
 
+	public function game_meta_box() {
+		add_meta_box(
+			'btm-game-meta_box',
+			'Game data',
+			array( $this, 'game_meta_box_callback' ),
+			array( 'bt-games' ),
+			'advanced',
+			'high'
+		);
+	}
+
+	public function game_meta_box_callback( $post, $meta ) {
+		$screens = $meta['args'];
+
+		// Используем nonce для верификации
+		wp_nonce_field( plugin_basename( __FILE__ ), 'myplugin_noncename' );
+
+		// значение поля
+		$value = get_post_meta( $post->ID, 'my_meta_key', 1 );
+
+		// Поля формы для введения данных
+		echo '<label for="myplugin_new_field">' . __( "Description for this field", 'myplugin_textdomain' ) . '</label> ';
+		echo '<input type="text" id="myplugin_new_field" name="myplugin_new_field" value="' . $value . '" size="25" />';
+	}
+
+	public function move_game_meta_box_to_the_top() {
+		global $post, $wp_meta_boxes;
+		do_meta_boxes( get_current_screen(), 'advanced', $post );
+		unset( $wp_meta_boxes['bt-games']['advanced'] );
+	}
+
 }
