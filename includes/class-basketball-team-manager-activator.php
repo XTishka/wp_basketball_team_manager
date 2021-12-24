@@ -30,7 +30,6 @@ class Basketball_Team_Manager_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		self::registerGamesPost();
 	}
-
 }

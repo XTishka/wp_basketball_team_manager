@@ -157,6 +157,19 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		// Register settings menu
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
+
+		// Register taxonomies
+		$this->loader->add_action( 'init', $plugin_admin, 'register_tournaments_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_seasons_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_tv_channels_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_staff_taxonomy' );
+
+		//  Register new post types
+		$this->loader->add_action( 'init', $plugin_admin, 'register_games_posts' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_team_posts' );
+
 	}
 
 	/**
