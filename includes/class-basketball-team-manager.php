@@ -161,8 +161,10 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
 
 		// Register taxonomies
-		$this->loader->add_action( 'init', $plugin_admin, 'register_tournaments_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_seasons_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_tournaments_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_teams_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin, 'register_arenas_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_tv_channels_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_staff_taxonomy' );
 
@@ -173,6 +175,9 @@ class Basketball_Team_Manager {
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'game_meta_box' );
 		$this->loader->add_action( 'edit_form_after_title', $plugin_admin, 'move_game_meta_box_to_the_top' );
+
+		// Save custom posts data
+		$this->loader->add_action( 'save_post', $plugin_admin, 'save_game_post' );
 	}
 
 	/**

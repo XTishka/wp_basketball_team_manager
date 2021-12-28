@@ -36,6 +36,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'BASKETBALL_TEAM_MANAGER_VERSION', '1.0.0' );
+define( 'BASKETBALL_TEAM_MANAGER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'BASKETBALL_TEAM_MANAGER_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.

@@ -77,7 +77,9 @@ class Basketball_Team_Manager_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/basketball-team-manager-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style( 'jquery-datetimepicker', plugin_dir_url( __FILE__ ) . 'css/jquery.datetimepicker.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'btm-selectize', plugin_dir_url( __FILE__ ) . 'css/selectize.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'btm-selectize-default', plugin_dir_url( __FILE__ ) . 'css/selectize.default.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -100,7 +102,8 @@ class Basketball_Team_Manager_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/basketball-team-manager-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script( 'btm-datetime-picker', plugin_dir_url( __FILE__ ) . 'js/datetime-picker.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'btm-selectize', plugin_dir_url( __FILE__ ) . 'js/selectize.min.js', array( 'jquery' ), $this->version, false );
 	}
 
 	public function register_setting_menu() {
@@ -180,6 +183,66 @@ class Basketball_Team_Manager_Admin {
 		) );
 	}
 
+	public function register_teams_taxonomy() {
+		$labels = array(
+			'name'                       => _x( 'Teams', 'taxonomy general name' ),
+			'singular_name'              => _x( 'Team', 'taxonomy singular name' ),
+			'search_items'               => __( 'Search Team' ),
+			'popular_items'              => __( 'Popular Teams' ),
+			'all_items'                  => __( 'All Teams' ),
+			'parent_item'                => null,
+			'parent_item_colon'          => null,
+			'edit_item'                  => __( 'Edit Team' ),
+			'update_item'                => __( 'Update Team' ),
+			'add_new_item'               => __( 'Add New Team' ),
+			'new_item_name'              => __( 'New Team Name' ),
+			'separate_items_with_commas' => __( 'Separate teams with commas' ),
+			'add_or_remove_items'        => __( 'Add or remove teams' ),
+			'choose_from_most_used'      => __( 'Choose from the most used teams' ),
+			'menu_name'                  => __( 'Teams' ),
+		);
+
+		register_taxonomy( 'teams', 'bt-games', array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'teams' ),
+		) );
+	}
+
+	public function register_arenas_taxonomy() {
+		$labels = array(
+			'name'                       => _x( 'Arenas', 'taxonomy general name' ),
+			'singular_name'              => _x( 'Arena', 'taxonomy singular name' ),
+			'search_items'               => __( 'Search Arena' ),
+			'popular_items'              => __( 'Popular Arenas' ),
+			'all_items'                  => __( 'All Arenas' ),
+			'parent_item'                => null,
+			'parent_item_colon'          => null,
+			'edit_item'                  => __( 'Edit Arena' ),
+			'update_item'                => __( 'Update Arena' ),
+			'add_new_item'               => __( 'Add New Arena' ),
+			'new_item_name'              => __( 'New Team Arena' ),
+			'separate_items_with_commas' => __( 'Separate arenas with commas' ),
+			'add_or_remove_items'        => __( 'Add or remove arenas' ),
+			'choose_from_most_used'      => __( 'Choose from the most used arenas' ),
+			'menu_name'                  => __( 'Arenas' ),
+		);
+
+		register_taxonomy( 'arenas', 'bt-games', array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'arenas' ),
+		) );
+	}
+
 	public function register_tv_channels_taxonomy() {
 		$labels = array(
 			'name'                       => _x( 'TV Channels', 'taxonomy general name' ),
@@ -211,25 +274,27 @@ class Basketball_Team_Manager_Admin {
 	}
 
 	public function register_staff_taxonomy() {
+		$labels = array(
+			'name'                       => _x( 'Staffs', 'taxonomy general name' ),
+			'singular_name'              => _x( 'Staff', 'taxonomy singular name' ),
+			'search_items'               => __( 'Search Staffs' ),
+			'popular_items'              => __( 'Popular Staffs' ),
+			'all_items'                  => __( 'All Staffs' ),
+			'parent_item'                => null,
+			'parent_item_colon'          => null,
+			'edit_item'                  => __( 'Edit Staff' ),
+			'update_item'                => __( 'Update Staff' ),
+			'add_new_item'               => __( 'Add New Staff' ),
+			'new_item_name'              => __( 'New Staff Name' ),
+			'separate_items_with_commas' => __( 'Separate staffs with commas' ),
+			'add_or_remove_items'        => __( 'Add or remove staffs' ),
+			'choose_from_most_used'      => __( 'Choose from the most used staffs' ),
+			'menu_name'                  => __( 'Staffs' ),
+		);
+
 		register_taxonomy( 'staffs', 'bt-team', array(
 			'hierarchical'      => false,
-			'labels'            => array(
-				'name'                       => _x( 'Staffs', 'taxonomy general name' ),
-				'singular_name'              => _x( 'Staff', 'taxonomy singular name' ),
-				'search_items'               => __( 'Search Staffs' ),
-				'popular_items'              => __( 'Popular Staffs' ),
-				'all_items'                  => __( 'All Staffs' ),
-				'parent_item'                => null,
-				'parent_item_colon'          => null,
-				'edit_item'                  => __( 'Edit Staff' ),
-				'update_item'                => __( 'Update Staff' ),
-				'add_new_item'               => __( 'Add New Staff' ),
-				'new_item_name'              => __( 'New Staff Name' ),
-				'separate_items_with_commas' => __( 'Separate staffs with commas' ),
-				'add_or_remove_items'        => __( 'Add or remove staffs' ),
-				'choose_from_most_used'      => __( 'Choose from the most used staffss' ),
-				'menu_name'                  => __( 'Staffs' ),
-			),
+			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
@@ -343,16 +408,74 @@ class Basketball_Team_Manager_Admin {
 
 	public function game_meta_box_callback( $post, $meta ) {
 		$screens = $meta['args'];
+		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_game_noncename' );
 
-		// Используем nonce для верификации
-		wp_nonce_field( plugin_basename( __FILE__ ), 'myplugin_noncename' );
+		$gameData = array(
+			'date'             => get_post_meta( $post->ID, 'game_date', 1 ),
+			'time'             => get_post_meta( $post->ID, 'game_time', 1 ),
+			'arena'            => get_post_meta( $post->ID, 'game_arena', 1 ),
+			'home_team'        => get_post_meta( $post->ID, 'game_home_team', 1 ),
+			'guest_team'       => get_post_meta( $post->ID, 'game_guest_team', 1 ),
+			'home_team_score'  => get_post_meta( $post->ID, 'game_home_team_score', 1 ),
+			'guest_team_score' => get_post_meta( $post->ID, 'game_guest_team_score', 1 ),
+			'season'           => get_post_meta( $post->ID, 'game_season', 1 ),
+			'tournament'       => get_post_meta( $post->ID, 'game_tournament', 1 ),
+			'statistics_link'  => get_post_meta( $post->ID, 'game_statistics_link', 1 ),
+			'tv'               => get_post_meta( $post->ID, 'game_tv', 1 ),
+			'tv_link'          => get_post_meta( $post->ID, 'game_tv_link', 1 ),
+		);
 
-		// значение поля
-		$value = get_post_meta( $post->ID, 'my_meta_key', 1 );
+		$teamsTerms = get_terms(
+			array(
+				'taxonomy'   => 'teams',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
 
-		// Поля формы для введения данных
-		echo '<label for="myplugin_new_field">' . __( "Description for this field", 'myplugin_textdomain' ) . '</label> ';
-		echo '<input type="text" id="myplugin_new_field" name="myplugin_new_field" value="' . $value . '" size="25" />';
+		$arenasTerms = get_terms(
+			array(
+				'taxonomy'   => 'arenas',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'DESC',
+			)
+		);
+
+		$seasonsTerms = get_terms(
+			array(
+				'taxonomy'   => 'seasons',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'DESC',
+			)
+		);
+
+		$tournamentsTerms = get_terms(
+			array(
+				'taxonomy'   => 'tournaments',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
+		$tvTerms = get_terms(
+			array(
+				'taxonomy'   => 'tv_channels',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
+		ob_start();
+		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/game-data-form.php' );
+		game_data_form( $gameData, $this->plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms );
+		$form = ob_get_contents();
+		ob_end_clean();
+		echo $form;
 	}
 
 	public function move_game_meta_box_to_the_top() {
@@ -361,4 +484,64 @@ class Basketball_Team_Manager_Admin {
 		unset( $wp_meta_boxes['bt-games']['advanced'] );
 	}
 
+	public function save_game_post( $post_id ) {
+		if ( isset( $_POST ) and $_POST['post_type'] == 'bt-games' ) {
+			$gameData = array(
+				'game_home_team',
+				'game_home_team_score',
+				'game_guest_team_score',
+				'game_guest_team',
+				'game_date',
+				'game_time',
+				'game_arena',
+				'game_season',
+				'game_tournament',
+				'game_statistics_link',
+				'game_tv',
+				'game_tv_link',
+			);
+
+			if ( ! wp_verify_nonce( $_POST['bt_game_noncename'], plugin_basename( __FILE__ ) ) ) {
+				return;
+			}
+
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return;
+			}
+
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return;
+			}
+
+			foreach ( $gameData as $field ) {
+				update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+			}
+
+			$homeTeamTerm  = get_term( $_POST['game_home_team'], 'teams' );
+			$guestTeamTerm = get_term( $_POST['game_guest_team'], 'teams' );
+			if ( isset( $homeTeamTerm ) and isset( $guestTeamTerm ) ) {
+				wp_set_object_terms( $post_id, array( $homeTeamTerm->term_id, $guestTeamTerm->term_id ), 'teams' );
+			}
+
+			$arenaTerm = get_term( $_POST['game_arena'], 'arenas' );
+			if ( isset( $arenaTerm ) ) {
+				wp_set_object_terms( $post_id, $arenaTerm->term_id, 'arenas' );
+			}
+
+			$seasonTerm = get_term( $_POST['game_season'], 'seasons' );
+			if ( isset( $seasonTerm ) ) {
+				wp_set_object_terms( $post_id, $seasonTerm->term_id, 'seasons' );
+			}
+
+			$tournamentTerm = get_term( $_POST['game_tournament'], 'tournaments' );
+			if ( isset( $tournamentTerm ) ) {
+				wp_set_object_terms( $post_id, $tournamentTerm->term_id, 'tournaments' );
+			}
+
+			$tvTerm = get_term( $_POST['game_tv'], 'tv_channels' );
+			if ( isset( $tvTerm ) ) {
+				wp_set_object_terms( $post_id, $tvTerm->term_id, 'tv_channels' );
+			}
+		}
+	}
 }

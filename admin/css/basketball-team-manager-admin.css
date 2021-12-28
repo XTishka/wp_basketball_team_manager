@@ -2,3 +2,96 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.game-row {
+    padding: 30px;
+    background: #eee;
+    margin-top: 10px;
+}
+.game-row label {
+    margin-right: 10px;
+    font-weight: 700;
+}
+.team-row {
+    display: flex;
+    justify-content: space-between;
+}
+.team-row p {
+    padding: 0 20px;
+}
+.team-row .team {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    align-items: center;
+}
+.team-row .team label {
+    width: 100px;
+}
+.team-row .team label.guest {
+    text-align: right;
+}
+.team-row .team .home-team {
+    width: 100%;
+    padding-right: 20px;
+}
+.team-row .team .guest-team {
+    width: 100%;
+    padding-left: 20px;
+}
+.team-row .team input {
+    width: 60px;
+}
+
+.time-and-place-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 20px;
+}
+.time-and-place-row label {
+    display: block;
+    width: 100px;
+}
+.time-and-place-row .date {
+    width: 25%;
+}
+.time-and-place-row .time {
+    width: 25%;
+}
+.time-and-place-row .arena {
+    width: 50%;
+}
+.time-and-place-row .arena .selectize-control {
+    width: 100%;
+}
+
+.taxonomies-row {
+    display: flex;
+    margin-top: 30px;
+    justify-content: space-between;
+    gap: 0 20px;
+}
+.taxonomies-row label {
+    width: 100px;
+    display: block;
+}
+.taxonomies-row .season {
+    width: 25%;
+}
+.taxonomies-row select {
+    width: 211px;
+}
+.taxonomies-row .tournament {
+    width: 25%;
+}
+.taxonomies-row .space {
+    width: 50%;
+}
+.share-row {
+    display: flex;
+    justify-content: space-between;
+}
+.share-row select {
+    width: 211px;
+}
