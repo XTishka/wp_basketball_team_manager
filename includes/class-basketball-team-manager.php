@@ -77,6 +77,8 @@ class Basketball_Team_Manager {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
+		$this->define_admin_game_posts_hooks();
+		$this->define_admin_team_posts_hooks();
 		$this->define_public_hooks();
 
 	}
@@ -115,6 +117,8 @@ class Basketball_Team_Manager {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-team-posts.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -159,6 +163,10 @@ class Basketball_Team_Manager {
 
 		// Register settings menu
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
+	}
+
+	private function define_admin_game_posts_hooks() {
+		$plugin_admin = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
 
 		// Register taxonomies
 		$this->loader->add_action( 'init', $plugin_admin, 'register_seasons_taxonomy' );
@@ -166,11 +174,9 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'init', $plugin_admin, 'register_teams_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_arenas_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_tv_channels_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_staff_taxonomy' );
 
 		//  Register new post types
 		$this->loader->add_action( 'init', $plugin_admin, 'register_games_posts' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_team_posts' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'game_meta_box' );
@@ -178,6 +184,16 @@ class Basketball_Team_Manager {
 
 		// Save custom posts data
 		$this->loader->add_action( 'save_post', $plugin_admin, 'save_game_post' );
+	}
+
+	private function define_admin_team_posts_hooks() {
+		$plugin_admin = new Admin_Team_Posts( $this->get_plugin_name(), $this->get_version() );
+
+		// Register taxonomies
+		$this->loader->add_action( 'init', $plugin_admin, 'register_staff_taxonomy' );
+
+		//  Register new post types
+		$this->loader->add_action( 'init', $plugin_admin, 'register_team_posts' );
 	}
 
 	/**
