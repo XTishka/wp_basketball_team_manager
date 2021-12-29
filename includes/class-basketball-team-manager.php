@@ -35,7 +35,7 @@ class Basketball_Team_Manager {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Basketball_Team_Manager_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Basketball_Team_Manager_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -44,7 +44,7 @@ class Basketball_Team_Manager {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_name;
 
@@ -53,7 +53,7 @@ class Basketball_Team_Manager {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
+	 * @var      string $version The current version of the plugin.
 	 */
 	protected $version;
 
@@ -77,8 +77,6 @@ class Basketball_Team_Manager {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_admin_game_posts_hooks();
-		$this->define_admin_team_posts_hooks();
 		$this->define_public_hooks();
 
 	}
@@ -119,6 +117,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-team-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -156,44 +155,41 @@ class Basketball_Team_Manager {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Basketball_Team_Manager_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin               = new Basketball_Team_Manager_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_game          = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_team          = new Admin_Team_Posts( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		// Register settings menu
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
-	}
-
-	private function define_admin_game_posts_hooks() {
-		$plugin_admin = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
 
 		// Register taxonomies
-		$this->loader->add_action( 'init', $plugin_admin, 'register_seasons_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_tournaments_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_teams_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_arenas_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_tv_channels_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_seasons_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tournaments_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_teams_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_arenas_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tv_channels_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_team, 'register_staff_taxonomy' );
 
 		//  Register new post types
-		$this->loader->add_action( 'init', $plugin_admin, 'register_games_posts' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_games_posts' );
+		$this->loader->add_action( 'init', $plugin_admin_team, 'register_team_posts' );
 
 		// Register metaboxes
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'game_meta_box' );
-		$this->loader->add_action( 'edit_form_after_title', $plugin_admin, 'move_game_meta_box_to_the_top' );
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_game, 'game_meta_box' );
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_game, 'move_game_meta_box_to_the_top' );
 
 		// Save custom posts data
-		$this->loader->add_action( 'save_post', $plugin_admin, 'save_game_post' );
-	}
+		$this->loader->add_action( 'save_post', $plugin_admin_game, 'save_game_post' );
 
-	private function define_admin_team_posts_hooks() {
-		$plugin_admin = new Admin_Team_Posts( $this->get_plugin_name(), $this->get_version() );
+		// Taxonomy field Image
+		$teamLogo = new Admin_Taxonomy_Field_Image('teams');
+		$teamLogo->init();
 
-		// Register taxonomies
-		$this->loader->add_action( 'init', $plugin_admin, 'register_staff_taxonomy' );
-
-		//  Register new post types
-		$this->loader->add_action( 'init', $plugin_admin, 'register_team_posts' );
+		$teamLogo = new Admin_Taxonomy_Field_Image('tv_channels');
+		$teamLogo->init();
 	}
 
 	/**
@@ -225,8 +221,8 @@ class Basketball_Team_Manager {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -235,8 +231,8 @@ class Basketball_Team_Manager {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    Basketball_Team_Manager_Loader    Orchestrates the hooks of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -245,8 +241,8 @@ class Basketball_Team_Manager {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_version() {
 		return $this->version;

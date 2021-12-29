@@ -5,6 +5,51 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 
 	private $plugin_name;
 
+	public function register_games_posts() {
+		$labels = [
+			'name'               => _x( 'Games', 'Post Type General Name', $this->plugin_name ),
+			'singular_name'      => _x( 'Game', 'Post Type Singular Name', $this->plugin_name ),
+			'menu_name'          => __( 'BT Games', $this->plugin_name ),
+			'parent_item_colon'  => __( 'Parent Game', $this->plugin_name ),
+			'all_items'          => __( 'All Games', $this->plugin_name ),
+			'view_item'          => __( 'View Game', $this->plugin_name ),
+			'add_new_item'       => __( 'Add New Game', $this->plugin_name ),
+			'add_new'            => __( 'Add New Game', $this->plugin_name ),
+			'edit_item'          => __( 'Edit Game', $this->plugin_name ),
+			'update_item'        => __( 'Update Game', $this->plugin_name ),
+			'search_items'       => __( 'Search Game', $this->plugin_name ),
+			'not_found'          => __( 'Not Found', $this->plugin_name ),
+			'not_found_in_trash' => __( 'Not found in Trash', $this->plugin_name ),
+		];
+
+		$args = [
+			'label'               => __( 'bt-games', $this->plugin_name ),
+			'description'         => __( 'Team games', $this->plugin_name ),
+			'labels'              => $labels,
+			'supports'            => [
+				'title',
+				'editor',
+				'custom-fields',
+			],
+			'hierarchical'        => false,
+			'public'              => true,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'menu_position'       => 31,
+			'can_export'          => true,
+			'has_archive'         => true,
+			'exclude_from_search' => false,
+			'publicly_queryable'  => true,
+			'capability_type'     => 'post',
+			'show_in_rest'        => true,
+			'menu_icon'           => $this->menuIcon,
+		];
+
+		register_post_type( 'bt-games', $args );
+	}
+
 	public function register_seasons_taxonomy() {
 		$labels = array(
 			'name'                       => _x( 'Seasons', 'taxonomy general name' ),
@@ -149,56 +194,11 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
-			'show_admin_column' => true,
+			'show_admin_column' => false,
 			'show_in_rest'      => true,
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'tv_channels' ),
 		) );
-	}
-
-	public function register_games_posts() {
-		$labels = [
-			'name'               => _x( 'Games', 'Post Type General Name', $this->plugin_name ),
-			'singular_name'      => _x( 'Game', 'Post Type Singular Name', $this->plugin_name ),
-			'menu_name'          => __( 'BT Games', $this->plugin_name ),
-			'parent_item_colon'  => __( 'Parent Game', $this->plugin_name ),
-			'all_items'          => __( 'All Games', $this->plugin_name ),
-			'view_item'          => __( 'View Game', $this->plugin_name ),
-			'add_new_item'       => __( 'Add New Game', $this->plugin_name ),
-			'add_new'            => __( 'Add New Game', $this->plugin_name ),
-			'edit_item'          => __( 'Edit Game', $this->plugin_name ),
-			'update_item'        => __( 'Update Game', $this->plugin_name ),
-			'search_items'       => __( 'Search Game', $this->plugin_name ),
-			'not_found'          => __( 'Not Found', $this->plugin_name ),
-			'not_found_in_trash' => __( 'Not found in Trash', $this->plugin_name ),
-		];
-
-		$args = [
-			'label'               => __( 'bt-games', $this->plugin_name ),
-			'description'         => __( 'Team games', $this->plugin_name ),
-			'labels'              => $labels,
-			'supports'            => [
-				'title',
-				'editor',
-				'custom-fields',
-			],
-			'hierarchical'        => false,
-			'public'              => true,
-			'show_ui'             => true,
-			'show_in_menu'        => true,
-			'show_in_nav_menus'   => true,
-			'show_in_admin_bar'   => true,
-			'menu_position'       => 31,
-			'can_export'          => true,
-			'has_archive'         => true,
-			'exclude_from_search' => false,
-			'publicly_queryable'  => true,
-			'capability_type'     => 'post',
-			'show_in_rest'        => true,
-			'menu_icon'           => $this->menuIcon,
-		];
-
-		register_post_type( 'bt-games', $args );
 	}
 
 	public function game_meta_box() {

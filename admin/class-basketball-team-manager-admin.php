@@ -104,6 +104,7 @@ class Basketball_Team_Manager_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/basketball-team-manager-admin.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'btm-datetime-picker', plugin_dir_url( __FILE__ ) . 'js/datetime-picker.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'btm-selectize', plugin_dir_url( __FILE__ ) . 'js/selectize.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'taxonomy-image-field', plugin_dir_url( __FILE__ ) . 'js/taxonomy-image-field.js', array( 'jquery' ), $this->version, false );
 	}
 
 	public function register_setting_menu() {
