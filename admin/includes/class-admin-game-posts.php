@@ -331,6 +331,66 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 		}
 	}
 
+	public function filter_games_by_seasons() {
+		global $typenow;
+		$post_type = 'bt-games'; // change to your post type
+		$taxonomy  = 'seasons'; // change to your taxonomy
+		if ($typenow == $post_type) {
+			$selected      = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
+			$info_taxonomy = get_taxonomy($taxonomy);
+			wp_dropdown_categories(array(
+				'show_option_all' => sprintf( __( 'Show all %s', 'textdomain' ), $info_taxonomy->label ),
+				'taxonomy'        => $taxonomy,
+				'name'            => $taxonomy,
+				'orderby'         => 'name',
+				'selected'        => $selected,
+				'show_count'      => true,
+				'hide_empty'      => true,
+			));
+		};
+	}
+
+	function filter_games_by_seasons_query($query) {
+		global $pagenow;
+		$post_type = 'bt-games'; // change to your post type
+		$taxonomy  = 'seasons'; // change to your taxonomy
+		$q_vars    = &$query->query_vars;
+		if ( $pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$taxonomy]) && is_numeric($q_vars[$taxonomy]) && $q_vars[$taxonomy] != 0 ) {
+			$term = get_term_by('id', $q_vars[$taxonomy], $taxonomy);
+			$q_vars[$taxonomy] = $term->slug;
+		}
+	}
+
+	public function filter_games_by_tournaments() {
+		global $typenow;
+		$post_type = 'bt-games'; // change to your post type
+		$taxonomy  = 'tournaments'; // change to your taxonomy
+		if ($typenow == $post_type) {
+			$selected      = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
+			$info_taxonomy = get_taxonomy($taxonomy);
+			wp_dropdown_categories(array(
+				'show_option_all' => sprintf( __( 'Show all %s', 'textdomain' ), $info_taxonomy->label ),
+				'taxonomy'        => $taxonomy,
+				'name'            => $taxonomy,
+				'orderby'         => 'name',
+				'selected'        => $selected,
+				'show_count'      => true,
+				'hide_empty'      => true,
+			));
+		};
+	}
+
+	function filter_games_by_tournaments_query($query) {
+		global $pagenow;
+		$post_type = 'bt-games'; // change to your post type
+		$taxonomy  = 'tournaments'; // change to your taxonomy
+		$q_vars    = &$query->query_vars;
+		if ( $pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$taxonomy]) && is_numeric($q_vars[$taxonomy]) && $q_vars[$taxonomy] != 0 ) {
+			$term = get_term_by('id', $q_vars[$taxonomy], $taxonomy);
+			$q_vars[$taxonomy] = $term->slug;
+		}
+	}
+
 	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {
 		$term = get_term( $termData, $taxonomy );
 		if ( isset( $term ) ) {

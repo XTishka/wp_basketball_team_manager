@@ -117,6 +117,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-team-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
 
 		/**
@@ -185,11 +186,21 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'save_post', $plugin_admin_game, 'save_game_post' );
 
 		// Taxonomy field Image
-		$teamLogo = new Admin_Taxonomy_Field_Image('teams');
-		$teamLogo->init();
+		$gameTeamLogo = new Admin_Taxonomy_Field_Image('teams');
+		$gameTeamLogo->init();
 
-		$teamLogo = new Admin_Taxonomy_Field_Image('tv_channels');
-		$teamLogo->init();
+		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image('tv_channels');
+		$gameTVChannelLogo->init();
+
+		// Taxonomy filters
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'seasons');
+		$gameTournamentFilter->init();
+
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'tournaments');
+		$gameTournamentFilter->init();
+
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'teams');
+		$gameTournamentFilter->init();
 	}
 
 	/**
