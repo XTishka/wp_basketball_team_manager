@@ -13,11 +13,11 @@ if ( ! class_exists( 'Admin_Taxonomy_Filters' ) ) {
 		}
 
 		public function init() {
-			add_action( 'restrict_manage_posts', array( $this, 'filter_games_by_seasons' ) );
-			add_action( 'parse_query', array( $this, 'filter_games_by_seasons_query' ) );
+			add_action( 'restrict_manage_posts', array( $this, 'filter_games_by_taxonomy' ) );
+			add_action( 'parse_query', array( $this, 'filter_games_by_taxonomy_query' ) );
 		}
 
-		public function filter_games_by_seasons() {
+		public function filter_games_by_taxonomy() {
 			global $typenow;
 			if ( $typenow == $this->post_type ) {
 				$selected      = isset( $_GET[ $this->taxonomy ] ) ? $_GET[ $this->taxonomy ] : '';
@@ -34,7 +34,7 @@ if ( ! class_exists( 'Admin_Taxonomy_Filters' ) ) {
 			};
 		}
 
-		function filter_games_by_seasons_query( $query ) {
+		function filter_games_by_taxonomy_query( $query ) {
 			global $pagenow;
 			$taxonomy  = $this->taxonomy;
 			$q_vars    = &$query->query_vars;

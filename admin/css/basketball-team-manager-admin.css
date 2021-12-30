@@ -95,3 +95,10 @@
 .share-row select {
     width: 211px;
 }
+
+.wp-list-table .column-home_team {
+    text-align: right;
+}
+.wp-list-table .column-score {
+    text-align: center;
+}

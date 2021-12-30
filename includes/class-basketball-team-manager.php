@@ -117,6 +117,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-team-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-all-posts-custom-column.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
 
@@ -191,6 +192,10 @@ class Basketball_Team_Manager {
 
 		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image('tv_channels');
 		$gameTVChannelLogo->init();
+
+		// All posts custom columns
+		$gameDateColumn = new Admin_All_Posts_Custom_Column($this->plugin_name);
+		$gameDateColumn->init();
 
 		// Taxonomy filters
 		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'seasons');
