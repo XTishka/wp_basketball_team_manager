@@ -1,7 +1,7 @@
 <?php
-function player_data_form(  ) { ?>
+function staff_member_data_form(  ) { ?>
 
-    <h1>Teammate</h1>
+    <h1>Staff member</h1>
 
     <script>
         jQuery('#game_date').datetimepicker(

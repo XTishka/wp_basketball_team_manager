@@ -1,28 +1,28 @@
 <?php
-class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
+class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 
 	private $plugin_name;
 
-	public function register_players_posts() {
+	public function register_staff_posts() {
 		$labels = [
-			'name'               => _x( 'Players', 'Post Type General Name', $this->plugin_name ),
-			'singular_name'      => _x( 'Player', 'Post Type Singular Name', $this->plugin_name ),
-			'menu_name'          => __( 'BT Players', $this->plugin_name ),
-			'parent_item_colon'  => __( 'Parent Player', $this->plugin_name ),
-			'all_items'          => __( 'All Players', $this->plugin_name ),
-			'view_item'          => __( 'View Player', $this->plugin_name ),
-			'add_new_item'       => __( 'Add New Player', $this->plugin_name ),
-			'add_new'            => __( 'Add Player', $this->plugin_name ),
-			'edit_item'          => __( 'Edit Player', $this->plugin_name ),
-			'update_item'        => __( 'Update Player', $this->plugin_name ),
-			'search_items'       => __( 'Search Player', $this->plugin_name ),
+			'name'               => _x( 'Members', 'Post Type General Name', $this->plugin_name ),
+			'singular_name'      => _x( 'Member', 'Post Type Singular Name', $this->plugin_name ),
+			'menu_name'          => __( 'BT Staff', $this->plugin_name ),
+			'parent_item_colon'  => __( 'Parent Member', $this->plugin_name ),
+			'all_items'          => __( 'All Members', $this->plugin_name ),
+			'view_item'          => __( 'View Member', $this->plugin_name ),
+			'add_new_item'       => __( 'Add New Member', $this->plugin_name ),
+			'add_new'            => __( 'Add Member', $this->plugin_name ),
+			'edit_item'          => __( 'Edit Member', $this->plugin_name ),
+			'update_item'        => __( 'Update Member', $this->plugin_name ),
+			'search_items'       => __( 'Search Member', $this->plugin_name ),
 			'not_found'          => __( 'Not Found', $this->plugin_name ),
 			'not_found_in_trash' => __( 'Not found in Trash', $this->plugin_name ),
 		];
 
 		$args = [
-			'label'               => __( 'bt-players', $this->plugin_name ),
-			'description'         => __( 'Team players', $this->plugin_name ),
+			'label'               => __( 'bt-staff', $this->plugin_name ),
+			'description'         => __( 'Staff members', $this->plugin_name ),
 			'labels'              => $labels,
 			'supports'            => [
 				'title',
@@ -36,7 +36,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			'show_in_menu'        => true,
 			'show_in_nav_menus'   => true,
 			'show_in_admin_bar'   => true,
-			'menu_position'       => 32,
+			'menu_position'       => 33,
 			'can_export'          => true,
 			'has_archive'         => true,
 			'exclude_from_search' => false,
@@ -47,7 +47,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 
 		];
 
-		register_post_type( 'bt-players', $args );
+		register_post_type( 'bt-staff', $args );
 	}
 
 	public function register_position_taxonomy() {
@@ -69,43 +69,43 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			'menu_name'                  => __( 'Positions' ),
 		);
 
-		register_taxonomy( 'players', 'bt-players', array(
+		register_taxonomy( 'staff-member', 'bt-staff', array(
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'players' ),
+			'rewrite'           => array( 'slug' => 'staff-member' ),
 		) );
 	}
 
-	public function player_meta_box() {
+	public function staff_member_meta_box() {
 		add_meta_box(
-			'btm-player-meta_box',
-			'Player data',
-			array( $this, 'player_meta_box_callback' ),
-			array( 'bt-players' ),
+			'btm-staff-member-meta_box',
+			'Staff member data',
+			array( $this, 'staff_member_meta_box_callback' ),
+			array( 'bt-staff' ),
 			'advanced',
 			'high'
 		);
 	}
 
-	public function player_meta_box_callback( $post, $meta ) {
+	public function staff_member_meta_box_callback( $post, $meta ) {
 		$screens = $meta['args'];
-		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_player_noncename' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_staff_member_noncename' );
 
 		ob_start();
-		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php' );
-		player_data_form(  );
+		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/staff-member-data-form.php' );
+		staff_member_data_form(  );
 		$form = ob_get_contents();
 		ob_end_clean();
 
 		echo $form;
 	}
 
-	public function remove_player_meta_box_duplicate() {
+	public function remove_staff_member_meta_box_duplicate() {
 		global $post, $wp_meta_boxes;
-		unset( $wp_meta_boxes['bt-players']['advanced'] );
+		unset( $wp_meta_boxes['bt-staff']['advanced'] );
 	}
 }

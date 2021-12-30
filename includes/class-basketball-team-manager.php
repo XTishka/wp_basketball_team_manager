@@ -117,6 +117,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-all-posts-custom-column.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
@@ -174,15 +175,15 @@ class Basketball_Team_Manager {
 		 **/
 		$plugin_admin_game = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
 
+		// Register game post type
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_games_posts' );
+
 		// Register games taxonomies
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_seasons_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tournaments_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_teams_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_arenas_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tv_channels_taxonomy' );
-
-		// Register game post type
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_games_posts' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_game, 'game_meta_box' );
@@ -218,11 +219,10 @@ class Basketball_Team_Manager {
 		 **/
 		$plugin_admin_player = new Admin_Players_Posts( $this->get_plugin_name(), $this->get_version() );
 
-		// Register players taxonomies
-		$this->loader->add_action( 'init', $plugin_admin_player, 'register_position_taxonomy' );
-
 		// Register player post type
 		$this->loader->add_action( 'init', $plugin_admin_player, 'register_players_posts' );
+		// Register players taxonomies
+		$this->loader->add_action( 'init', $plugin_admin_player, 'register_position_taxonomy' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_player, 'player_meta_box' );
@@ -232,8 +232,18 @@ class Basketball_Team_Manager {
 		/**
 		 * Admin Staff hooks
 		 **/
+		$plugin_admin_staff_member = new Admin_Staff_Posts( $this->get_plugin_name(), $this->get_version() );
 
-		
+		// Register staff post type
+		$this->loader->add_action( 'init', $plugin_admin_staff_member, 'register_staff_posts' );
+
+		// Register staff taxonomies
+		$this->loader->add_action( 'init', $plugin_admin_staff_member, 'register_position_taxonomy' );
+
+		// Register metaboxes
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_staff_member, 'staff_member_meta_box' );
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_staff_member, 'remove_staff_member_meta_box_duplicate' );
+
 	}
 
 	/**
