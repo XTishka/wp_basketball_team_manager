@@ -116,7 +116,7 @@ class Basketball_Team_Manager {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-team-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-all-posts-custom-column.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
@@ -157,9 +157,10 @@ class Basketball_Team_Manager {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin               = new Basketball_Team_Manager_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_admin_game          = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
-		$plugin_admin_team          = new Admin_Team_Posts( $this->get_plugin_name(), $this->get_version() );
+		/**
+		 * Admin Common Hooks
+		 * */
+		$plugin_admin = new Basketball_Team_Manager_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -167,17 +168,21 @@ class Basketball_Team_Manager {
 		// Register settings menu
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
 
-		// Register taxonomies
+
+		/**
+		 * Admin Games hooks
+		 **/
+		$plugin_admin_game = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
+
+		// Register games taxonomies
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_seasons_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tournaments_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_teams_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_arenas_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tv_channels_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_team, 'register_staff_taxonomy' );
 
-		//  Register new post types
+		// Register game post type
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_games_posts' );
-		$this->loader->add_action( 'init', $plugin_admin_team, 'register_team_posts' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_game, 'game_meta_box' );
@@ -187,25 +192,48 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'save_post', $plugin_admin_game, 'save_game_post' );
 
 		// Taxonomy field Image
-		$gameTeamLogo = new Admin_Taxonomy_Field_Image('teams');
+		$gameTeamLogo = new Admin_Taxonomy_Field_Image( 'teams' );
 		$gameTeamLogo->init();
 
-		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image('tv_channels');
+		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image( 'tv_channels' );
 		$gameTVChannelLogo->init();
 
 		// All posts custom columns
-		$gameDateColumn = new Admin_All_Posts_Custom_Column($this->plugin_name);
+		$gameDateColumn = new Admin_All_Posts_Custom_Column( $this->plugin_name );
 		$gameDateColumn->init();
 
 		// Taxonomy filters
-		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'seasons');
+		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'seasons' );
 		$gameTournamentFilter->init();
 
-		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'tournaments');
+		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'tournaments' );
 		$gameTournamentFilter->init();
 
-		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'teams');
+		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'teams' );
 		$gameTournamentFilter->init();
+
+
+		/**
+		 * Admin Players hooks
+		 **/
+		$plugin_admin_player = new Admin_Players_Posts( $this->get_plugin_name(), $this->get_version() );
+
+		// Register players taxonomies
+		$this->loader->add_action( 'init', $plugin_admin_player, 'register_position_taxonomy' );
+
+		// Register player post type
+		$this->loader->add_action( 'init', $plugin_admin_player, 'register_players_posts' );
+
+		// Register metaboxes
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_player, 'player_meta_box' );
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_player, 'remove_player_meta_box_duplicate' );
+
+
+		/**
+		 * Admin Staff hooks
+		 **/
+
+		
 	}
 
 	/**
