@@ -247,6 +247,8 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_staff_member, 'staff_member_meta_box' );
 		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_staff_member, 'remove_staff_member_meta_box_duplicate' );
 
+		// Save custom posts data
+		$this->loader->add_action( 'save_post', $plugin_admin_staff_member, 'save_staff_member_data' );
 	}
 
 	/**

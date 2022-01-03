@@ -98,6 +98,7 @@ class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 
 		$memberData = array(
 			'member_name'          => get_post_meta( $post->ID, 'member_name', 1 ),
+			'member_position'      => get_post_meta( $post->ID, 'member_position', 1 ),
 			'member_birthdate'     => get_post_meta( $post->ID, 'member_birthdate', 1 ),
 			'member_in_club_since' => get_post_meta( $post->ID, 'member_in_club_since', 1 ),
 		);
@@ -123,5 +124,43 @@ class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 	public function remove_staff_member_meta_box_duplicate() {
 		global $post, $wp_meta_boxes;
 		unset( $wp_meta_boxes['bt-staff']['advanced'] );
+	}
+
+	public function save_staff_member_data( $post_id ) {
+		$post_type = $_POST['post_type'] ?? '';
+		if ( isset( $_POST ) and $post_type == 'bt-staff' ) {
+			$memberData = array(
+				'member_name',
+				'member_position',
+				'member_birthdate',
+				'member_in_club_since',
+			);
+		}
+
+		$noncename = $_POST['bt_staff_member_noncename'] ?? '';
+		if ( ! wp_verify_nonce( $noncename, plugin_basename( __FILE__ ) ) ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		foreach ( $memberData as $field ) {
+			update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+		}
+
+		$this->updatePostTaxonomySingle( $post_id, $_POST['member_position'], 'staff-position' );
+	}
+
+	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {
+		$term = get_term( $termData, $taxonomy );
+		if ( isset( $term ) ) {
+			wp_set_object_terms( $post_id, $term->term_id, $taxonomy );
+		}
 	}
 }
