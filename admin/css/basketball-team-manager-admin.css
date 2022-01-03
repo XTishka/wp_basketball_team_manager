@@ -5,7 +5,7 @@
 
 .game-row {
     padding: 30px;
-    background: #eee;
+    background: #F9F9F9;
     margin-top: 10px;
 }
 .game-row label {
@@ -101,4 +101,34 @@
 }
 .wp-list-table .column-score {
     text-align: center;
+}
+
+/* Player meta box */
+.player-wrapper {
+    display: flex;
+}
+.player-wrapper .featured_image {
+    width: 30%;
+    padding: 10px;
+}
+.player-wrapper .featured_image img {
+    width: 100%;
+}
+.player-wrapper .form {
+    width: 70%;
+    padding: 10px;
+}
+.player-wrapper label {
+    font-weight: 700;
+    display: block;
+}
+.player-wrapper .form .row {
+    display: flex;
+    justify-content: space-between;
+    background: #F9F9F9;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.player-wrapper .form select {
+    width: 211px;
 }

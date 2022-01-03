@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 
 	private $plugin_name;
@@ -69,14 +70,14 @@ class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 			'menu_name'                  => __( 'Positions' ),
 		);
 
-		register_taxonomy( 'staff-member', 'bt-staff', array(
+		register_taxonomy( 'staff-position', 'bt-staff', array(
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'staff-member' ),
+			'rewrite'           => array( 'slug' => 'staff-position' ),
 		) );
 	}
 
@@ -95,9 +96,24 @@ class Admin_Staff_Posts extends Basketball_Team_Manager_Admin {
 		$screens = $meta['args'];
 		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_staff_member_noncename' );
 
+		$memberData = array(
+			'member_name'          => get_post_meta( $post->ID, 'member_name', 1 ),
+			'member_birthdate'     => get_post_meta( $post->ID, 'member_birthdate', 1 ),
+			'member_in_club_since' => get_post_meta( $post->ID, 'member_in_club_since', 1 ),
+		);
+
+		$positionTerms = get_terms(
+			array(
+				'taxonomy'   => 'staff-position',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
 		ob_start();
 		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/staff-member-data-form.php' );
-		staff_member_data_form(  );
+		staff_member_data_form( $post, $this->plugin_name, $memberData, $positionTerms );
 		$form = ob_get_contents();
 		ob_end_clean();
 

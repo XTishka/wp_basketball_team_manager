@@ -291,7 +291,8 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 	}
 
 	public function save_game_post( $post_id ) {
-		if ( isset( $_POST ) and $_POST['post_type'] == 'bt-games' ) {
+		$post_type = $_POST['post_type'] ?? '';
+		if ( isset( $_POST ) and $post_type == 'bt-games' ) {
 			$gameData = array(
 				'game_home_team',
 				'game_home_team_score',

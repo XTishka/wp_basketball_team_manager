@@ -228,6 +228,9 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_player, 'player_meta_box' );
 		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_player, 'remove_player_meta_box_duplicate' );
 
+		// Save custom posts data
+		$this->loader->add_action( 'save_post', $plugin_admin_player, 'save_players_data' );
+
 
 		/**
 		 * Admin Staff hooks

@@ -1,4 +1,5 @@
 <?php
+
 class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 
 	private $plugin_name;
@@ -7,7 +8,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		$labels = [
 			'name'               => _x( 'Players', 'Post Type General Name', $this->plugin_name ),
 			'singular_name'      => _x( 'Player', 'Post Type Singular Name', $this->plugin_name ),
-			'menu_name'          => __( 'BT Players', $this->plugin_name ),
+			'menu_name'          => __( 'BT Team', $this->plugin_name ),
 			'parent_item_colon'  => __( 'Parent Player', $this->plugin_name ),
 			'all_items'          => __( 'All Players', $this->plugin_name ),
 			'view_item'          => __( 'View Player', $this->plugin_name ),
@@ -69,7 +70,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			'menu_name'                  => __( 'Positions' ),
 		);
 
-		register_taxonomy( 'players', 'bt-players', array(
+		register_taxonomy( 'player-position', 'bt-players', array(
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
@@ -95,9 +96,31 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		$screens = $meta['args'];
 		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_player_noncename' );
 
+		$playerData = array(
+			'player_name'             => get_post_meta( $post->ID, 'player_name', 1 ),
+			'player_position'         => get_post_meta( $post->ID, 'player_position', 1 ),
+			'player_number'           => get_post_meta( $post->ID, 'player_number', 1 ),
+			'player_total_games'      => get_post_meta( $post->ID, 'player_total_games', 1 ),
+			'player_total_points'     => get_post_meta( $post->ID, 'player_total_points', 1 ),
+			'player_total_3_pointers' => get_post_meta( $post->ID, 'player_total_3_pointers', 1 ),
+			'player_birthdate'        => get_post_meta( $post->ID, 'player_birthdate', 1 ),
+			'player_nationality'      => get_post_meta( $post->ID, 'player_nationality', 1 ),
+			'player_weight'           => get_post_meta( $post->ID, 'player_weight', 1 ),
+			'player_height'           => get_post_meta( $post->ID, 'player_height', 1 ),
+		);
+
+		$positionTerms = get_terms(
+			array(
+				'taxonomy'   => 'player-position',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
 		ob_start();
 		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php' );
-		player_data_form(  );
+		player_data_form( $post, $this->plugin_name, $playerData, $positionTerms );
 		$form = ob_get_contents();
 		ob_end_clean();
 
@@ -107,5 +130,49 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 	public function remove_player_meta_box_duplicate() {
 		global $post, $wp_meta_boxes;
 		unset( $wp_meta_boxes['bt-players']['advanced'] );
+	}
+
+	public function save_players_data( $post_id ) {
+		$post_type = $_POST['post_type'] ?? '';
+		if ( isset( $_POST ) and $post_type == 'bt-players' ) {
+			$playerData = array(
+				'player_name',
+				'player_position',
+				'player_number',
+				'player_total_games',
+				'player_total_points',
+				'player_total_3_pointers',
+				'player_birthdate',
+				'player_nationality',
+				'player_weight',
+				'player_height',
+			);
+		}
+
+		$noncename = $_POST['bt_player_noncename'] ?? '';
+		if ( ! wp_verify_nonce( $noncename, plugin_basename( __FILE__ ) ) ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		foreach ( $playerData as $field ) {
+			update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+		}
+
+		$this->updatePostTaxonomySingle( $post_id, $_POST['player_position'], 'position' );
+	}
+
+	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {
+		$term = get_term( $termData, $taxonomy );
+		if ( isset( $term ) ) {
+			wp_set_object_terms( $post_id, $term->term_id, $taxonomy );
+		}
 	}
 }
