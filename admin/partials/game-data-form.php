@@ -1,5 +1,5 @@
 <?php
-function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms ) { ?>
+function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms ) { ?>
 
     <div class="game-row">
         <div class="team-row">
@@ -87,7 +87,17 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
 	                <?php endforeach; ?>
                 </select>
             </div>
-            <div class="space"></div>
+            <div class="sponsor">
+                <label for="game_sponsor"><?php echo __( "Game Sponsor", $plugin_name ); ?></label>
+                <select name="game_sponsor" id="game_sponsor" class="game-sponsor">
+		            <?php foreach ( $sponsorsTerms as $sponsor ) : ?>
+			            <?php $selected = ($gameData['sponsor'] == $sponsor->term_id ? 'selected' : '' ) ?>
+                        <option value="<?php echo $sponsor->term_id ?>" <?php echo $selected ?> >
+				            <?php echo $sponsor->name ?>
+                        </option>
+		            <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
     </div>

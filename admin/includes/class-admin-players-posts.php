@@ -81,6 +81,36 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		) );
 	}
 
+	public function register_status_taxonomy() {
+		$labels = array(
+			'name'                       => _x( 'Statuses', 'taxonomy general name' ),
+			'singular_name'              => _x( 'Status', 'taxonomy singular name' ),
+			'search_items'               => __( 'Search Statuses' ),
+			'popular_items'              => __( 'Popular Statuses' ),
+			'all_items'                  => __( 'All Statuses' ),
+			'parent_item'                => null,
+			'parent_item_colon'          => null,
+			'edit_item'                  => __( 'Edit Status' ),
+			'update_item'                => __( 'Update Status' ),
+			'add_new_item'               => __( 'Add New Status' ),
+			'new_item_name'              => __( 'New Status Name' ),
+			'separate_items_with_commas' => __( 'Separate statuses with commas' ),
+			'add_or_remove_items'        => __( 'Add or remove statuses' ),
+			'choose_from_most_used'      => __( 'Choose from the most used statuses' ),
+			'menu_name'                  => __( 'Statuses' ),
+		);
+
+		register_taxonomy( 'player-status', 'bt-players', array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'player-status' ),
+		) );
+	}
+
 	public function player_meta_box() {
 		add_meta_box(
 			'btm-player-meta_box',
@@ -100,6 +130,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			'player_name'             => get_post_meta( $post->ID, 'player_name', 1 ),
 			'player_position'         => get_post_meta( $post->ID, 'player_position', 1 ),
 			'player_number'           => get_post_meta( $post->ID, 'player_number', 1 ),
+			'player_status'           => get_post_meta( $post->ID, 'player_status', 1 ),
 			'player_total_games'      => get_post_meta( $post->ID, 'player_total_games', 1 ),
 			'player_total_points'     => get_post_meta( $post->ID, 'player_total_points', 1 ),
 			'player_total_3_pointers' => get_post_meta( $post->ID, 'player_total_3_pointers', 1 ),
@@ -118,9 +149,18 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			)
 		);
 
+		$statusTerms = get_terms(
+			array(
+				'taxonomy'   => 'player-status',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
 		ob_start();
 		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php' );
-		player_data_form( $post, $this->plugin_name, $playerData, $positionTerms );
+		player_data_form( $post, $this->plugin_name, $playerData, $positionTerms, $statusTerms );
 		$form = ob_get_contents();
 		ob_end_clean();
 
@@ -139,6 +179,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 				'player_name',
 				'player_position',
 				'player_number',
+				'player_status',
 				'player_total_games',
 				'player_total_points',
 				'player_total_3_pointers',
@@ -167,6 +208,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		}
 
 		$this->updatePostTaxonomySingle( $post_id, $_POST['player_position'], 'player-position' );
+		$this->updatePostTaxonomySingle( $post_id, $_POST['player_status'], 'player-status' );
 	}
 
 	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {

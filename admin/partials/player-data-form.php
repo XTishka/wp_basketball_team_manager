@@ -1,5 +1,5 @@
 <?php
-function player_data_form( $post, $plugin_name, $playerData, $positionTerms ) { ?>
+function player_data_form( $post, $plugin_name, $playerData, $positionTerms, $statusTerms ) { ?>
 
     <div class="player-wrapper">
         <div class="featured_image">
@@ -35,6 +35,18 @@ function player_data_form( $post, $plugin_name, $playerData, $positionTerms ) { 
                     <label for="player_number"><?php echo __( "Number", $plugin_name ); ?></label>
                     <input type="text" id="player_number" name="player_number" type="number"
                            value="<?php echo $playerData['player_number']; ?>" />
+                </div>
+
+                <div class="player_status">
+                    <label for="player_status"><?php echo __( "Status", $plugin_name ); ?></label>
+                    <select name="player_status" id="player_status" class="game-status">
+			            <?php foreach ( $statusTerms as $status ) : ?>
+				            <?php $selected = ($playerData['player_status'] == $status->term_id ? 'selected' : '' ) ?>
+                            <option value="<?php echo $status->term_id ?>" <?php echo $selected ?> >
+					            <?php echo $status->name ?>
+                            </option>
+			            <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
 

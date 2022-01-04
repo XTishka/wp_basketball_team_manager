@@ -34,7 +34,7 @@ if ( ! class_exists( 'Admin_Taxonomy_Field_Image' ) ) {
 		*/
 		public function add_category_image ( $taxonomy ) { ?>
 			<div class="form-field term-group">
-				<label for="category-image-id"><?php _e('Team logo', 'hero-theme'); ?></label>
+				<label for="category-image-id"><?php _e('Logo', 'hero-theme'); ?></label>
 				<input type="hidden" id="category-image-id" name="category-image-id" class="custom_media_url" value="">
 				<div id="category-image-wrapper"></div>
 				<p>

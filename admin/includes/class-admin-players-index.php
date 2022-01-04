@@ -25,6 +25,7 @@ if ( ! class_exists( 'Admin_Players_Index' ) ) {
 				'player_total_games'       => __( 'Total games', $this->plugin_name ),
 				'player_total_points'      => __( 'Total points', $this->plugin_name ),
 				'player_total_3_pointers'  => __( 'Total 3-pointers', $this->plugin_name ),
+				'taxonomy-player-status'   => __( 'Status', $this->plugin_name ),
 				'date'                     => $columns['date'],
 			);
 
@@ -33,8 +34,8 @@ if ( ! class_exists( 'Admin_Players_Index' ) ) {
 
 		public function populate_player_columns( $column, $post_id ) {
 			if ( 'player_photo' === $column ) {
-				if (has_post_thumbnail($post_id) == true) {
-					echo get_the_post_thumbnail( $post_id, array(80, 80) );
+				if ( has_post_thumbnail( $post_id ) == true ) {
+					echo get_the_post_thumbnail( $post_id, array( 80, 80 ) );
 				} else {
 					echo '<img src="' . BASKETBALL_TEAM_MANAGER_PLUGIN_URL . 'admin/img/player-default.png' . '" alt="" style="width: 80px">';
 				}

@@ -16,6 +16,11 @@
             create: true,
             sortField: "text",
         });
+
+        $("#game_sponsor").selectize({
+            create: true,
+            sortField: "text",
+        });
     });
 
 })(jQuery);

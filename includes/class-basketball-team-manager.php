@@ -186,6 +186,7 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_teams_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_arenas_taxonomy' );
 		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tv_channels_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_game, 'register_sponsors_taxonomy' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_game, 'game_meta_box' );
@@ -200,6 +201,9 @@ class Basketball_Team_Manager {
 
 		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image( 'tv_channels' );
 		$gameTVChannelLogo->init();
+
+		$gameSponsorLogo = new Admin_Taxonomy_Field_Image( 'sponsors' );
+		$gameSponsorLogo->init();
 
 		// All posts custom columns
 		$gameDateColumn = new Admin_Games_Index( $this->plugin_name );
@@ -225,6 +229,7 @@ class Basketball_Team_Manager {
 		$this->loader->add_action( 'init', $plugin_admin_player, 'register_players_posts' );
 		// Register players taxonomies
 		$this->loader->add_action( 'init', $plugin_admin_player, 'register_position_taxonomy' );
+		$this->loader->add_action( 'init', $plugin_admin_player, 'register_status_taxonomy' );
 
 		// Register metaboxes
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_player, 'player_meta_box' );
@@ -236,6 +241,9 @@ class Basketball_Team_Manager {
 		// Taxonomy filters
 		$playerPositionFilter = new Admin_Taxonomy_Filters( 'bt-players', 'player-position' );
 		$playerPositionFilter->init();
+
+		$playerStatusFilter = new Admin_Taxonomy_Filters( 'bt-players', 'player-status' );
+		$playerStatusFilter->init();
 
 		// Players Index
 		$playersIndexColumns = new Admin_Players_Index( $this->plugin_name );

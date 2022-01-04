@@ -70,6 +70,7 @@
     display: flex;
     margin-top: 30px;
     justify-content: space-between;
+    align-items: center;
     gap: 0 20px;
 }
 .taxonomies-row label {
@@ -85,7 +86,7 @@
 .taxonomies-row .tournament {
     width: 25%;
 }
-.taxonomies-row .space {
+.taxonomies-row .sponsor {
     width: 50%;
 }
 .share-row {

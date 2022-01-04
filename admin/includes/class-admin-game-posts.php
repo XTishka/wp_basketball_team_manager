@@ -201,6 +201,36 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 		) );
 	}
 
+	public function register_sponsors_taxonomy() {
+		$labels = array(
+			'name'                       => _x( 'Sponsors', 'taxonomy general name' ),
+			'singular_name'              => _x( 'Sponsor', 'taxonomy singular name' ),
+			'search_items'               => __( 'Search Sponsor' ),
+			'popular_items'              => __( 'Popular Sponsors' ),
+			'all_items'                  => __( 'All Sponsors' ),
+			'parent_item'                => null,
+			'parent_item_colon'          => null,
+			'edit_item'                  => __( 'Edit Sponsor' ),
+			'update_item'                => __( 'Update Sponsor' ),
+			'add_new_item'               => __( 'Add New Sponsor' ),
+			'new_item_name'              => __( 'New Sponsor Name' ),
+			'separate_items_with_commas' => __( 'Separate Sponsors with commas' ),
+			'add_or_remove_items'        => __( 'Add or remove Sponsors' ),
+			'choose_from_most_used'      => __( 'Choose from the most used Sponsors' ),
+			'menu_name'                  => __( 'Sponsors' ),
+		);
+
+		register_taxonomy( 'sponsors', 'bt-games', array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => false,
+			'show_in_rest'      => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'sponsors' ),
+		) );
+	}
+
 	public function game_meta_box() {
 		add_meta_box(
 			'btm-game-meta_box',
@@ -229,6 +259,7 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 			'statistics_link'  => get_post_meta( $post->ID, 'game_statistics_link', 1 ),
 			'tv'               => get_post_meta( $post->ID, 'game_tv', 1 ),
 			'tv_link'          => get_post_meta( $post->ID, 'game_tv_link', 1 ),
+			'sponsor'          => get_post_meta( $post->ID, 'game_sponsor', 1 ),
 		);
 
 		$teamsTerms = get_terms(
@@ -276,9 +307,18 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 			)
 		);
 
+		$sponsorsTerms = get_terms(
+			array(
+				'taxonomy'   => 'sponsors',
+				'hide_empty' => false,
+				'orderby'    => 'id',
+				'order'      => 'ASC',
+			)
+		);
+
 		ob_start();
 		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/game-data-form.php' );
-		game_data_form( $gameData, $this->plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms );
+		game_data_form( $gameData, $this->plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms );
 		$form = ob_get_contents();
 		ob_end_clean();
 		echo $form;
@@ -306,6 +346,7 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 				'game_statistics_link',
 				'game_tv',
 				'game_tv_link',
+				'game_sponsor',
 			);
 
 			if ( ! wp_verify_nonce( $_POST['bt_game_noncename'], plugin_basename( __FILE__ ) ) ) {
@@ -329,6 +370,7 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 			$this->updatePostTaxonomySingle( $post_id, $_POST['game_season'], 'seasons' );
 			$this->updatePostTaxonomySingle( $post_id, $_POST['game_tournament'], 'tournaments' );
 			$this->updatePostTaxonomySingle( $post_id, $_POST['game_tv'], 'tv_channels' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['game_sponsor'], 'sponsors' );
 		}
 	}
 
