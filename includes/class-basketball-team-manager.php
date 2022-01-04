@@ -121,6 +121,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-index.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-index.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-video-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
 
@@ -275,6 +276,29 @@ class Basketball_Team_Manager {
 		// Staff Index
 		$staffIndexColumns = new Admin_Staff_Index( $this->plugin_name );
 		$staffIndexColumns->init();
+
+
+		/**
+		 * Admin Video hooks
+		 **/
+		$plugin_admin_video = new Admin_Video_Posts( $this->get_plugin_name(), $this->get_version() );
+
+		// Register video post type
+		$this->loader->add_action( 'init', $plugin_admin_video, 'register_video_posts' );
+
+		// Register video taxonomies
+		$this->loader->add_action( 'init', $plugin_admin_video, 'register_category_taxonomy' );
+
+		// Save custom posts data
+		$this->loader->add_action( 'save_post', $plugin_admin_video, 'save_video_data' );
+
+		// Register metaboxes
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_video, 'video_meta_box' );
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_video, 'remove_video_meta_box_duplicate' );
+
+		// Taxonomy filters
+		$staffPositionFilter = new Admin_Taxonomy_Filters( 'bt-videos', 'video-category' );
+		$staffPositionFilter->init();
 	}
 
 	/**

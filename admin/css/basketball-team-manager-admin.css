@@ -134,8 +134,22 @@
     width: 211px;
 }
 
+.video-wrapper .row {
+    margin: 10px 0;
+    display: flex;
+}
+.video-wrapper .row label {
+    display: inline-block;
+    width: 10%;
+    font-weight: 700;
+}
+.video-wrapper .row input,
+.video-wrapper .row select {
+    width: 70%;
+}
 
-/* Players table */
+
+    /* Players table */
 .widefat thead tr th#player_photo {
     width: 80px !important;
 }
