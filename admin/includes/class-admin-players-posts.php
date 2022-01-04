@@ -77,7 +77,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'players' ),
+			'rewrite'           => array( 'slug' => 'player-position' ),
 		) );
 	}
 
@@ -166,7 +166,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 			update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
 		}
 
-		$this->updatePostTaxonomySingle( $post_id, $_POST['player_position'], 'position' );
+		$this->updatePostTaxonomySingle( $post_id, $_POST['player_position'], 'player-position' );
 	}
 
 	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {

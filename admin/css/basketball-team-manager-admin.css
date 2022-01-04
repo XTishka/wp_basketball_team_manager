@@ -132,3 +132,9 @@
 .player-wrapper .form select {
     width: 211px;
 }
+
+
+/* Players table */
+.widefat thead tr th#player_photo {
+    width: 80px !important;
+}

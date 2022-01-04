@@ -119,6 +119,7 @@ class Basketball_Team_Manager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-all-posts-custom-column.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-index.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
 
@@ -231,6 +232,14 @@ class Basketball_Team_Manager {
 		// Save custom posts data
 		$this->loader->add_action( 'save_post', $plugin_admin_player, 'save_players_data' );
 
+		// Taxonomy filters
+		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-players', 'player-position' );
+		$gameTournamentFilter->init();
+
+		// Players Index
+		$gameDateColumn = new Admin_Players_Index( $this->plugin_name );
+		$gameDateColumn->init();
+
 
 		/**
 		 * Admin Staff hooks
@@ -249,6 +258,10 @@ class Basketball_Team_Manager {
 
 		// Save custom posts data
 		$this->loader->add_action( 'save_post', $plugin_admin_staff_member, 'save_staff_member_data' );
+
+		// Taxonomy filters
+		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-staff', 'staff-position' );
+		$gameTournamentFilter->init();
 	}
 
 	/**

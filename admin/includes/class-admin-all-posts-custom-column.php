@@ -27,6 +27,7 @@ if ( ! class_exists( 'Admin_All_Posts_Custom_Column' ) ) {
 				'guest_team'  => __( 'Guest team', $this->plugin_name ),
 				'seasons'     => __( 'Season', $this->plugin_name ),
 				'tournaments' => __( 'Tournament', $this->plugin_name ),
+				'date'          => $columns['date'],
 			);
 
 			return $columns;
