@@ -1,8 +1,8 @@
 <?php
 
-if ( ! class_exists( 'Admin_Players_Index' ) ) {
+if ( ! class_exists( 'Admin_Staff_Index' ) ) {
 
-	class Admin_Players_Index {
+	class Admin_Staff_Index {
 
 		public $plugin_name;
 
@@ -11,15 +11,15 @@ if ( ! class_exists( 'Admin_Players_Index' ) ) {
 		}
 
 		public function init() {
-			add_filter( 'manage_bt-players_posts_columns', array( $this, 'set_player_posts_columns' ) );
-			add_action( 'manage_bt-players_posts_custom_column', array( $this, 'populate_player_columns' ), 10, 2 );
+			add_filter( 'manage_bt-players_posts_columns', array( $this, 'set_staff_posts_columns' ) );
+			add_action( 'manage_bt-players_posts_custom_column', array( $this, 'populate_staff_columns' ), 10, 2 );
 		}
 
-		public function set_player_posts_columns( $columns ) {
+		public function set_staff_posts_columns( $columns ) {
 			$columns = array(
 				'cb'                       => $columns['cb'],
 				'player_photo'             => '',
-				'title'                    => __( 'Player', $this->plugin_name ),
+				'title'                    => __( 'Team member', $this->plugin_name ),
 				'player_number'            => __( 'Number', $this->plugin_name ),
 				'taxonomy-player-position' => __( 'Position', $this->plugin_name ),
 				'player_total_games'       => __( 'Total games', $this->plugin_name ),
@@ -31,13 +31,9 @@ if ( ! class_exists( 'Admin_Players_Index' ) ) {
 			return $columns;
 		}
 
-		public function populate_player_columns( $column, $post_id ) {
+		public function populate_staff_columns( $column, $post_id ) {
 			if ( 'player_photo' === $column ) {
-				if (has_post_thumbnail($post_id) == true) {
-					echo get_the_post_thumbnail( $post_id, array(80, 80) );
-				} else {
-					echo '<img src="' . BASKETBALL_TEAM_MANAGER_PLUGIN_URL . 'admin/img/player-default.png' . '" alt="" style="width: 80px">';
-				}
+				echo get_the_post_thumbnail( $post_id, array(80, 80) );
 			}
 
 			if ( 'player_number' === $column ) {
