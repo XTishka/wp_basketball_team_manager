@@ -11,47 +11,40 @@ if ( ! class_exists( 'Admin_Staff_Index' ) ) {
 		}
 
 		public function init() {
-			add_filter( 'manage_bt-players_posts_columns', array( $this, 'set_staff_posts_columns' ) );
-			add_action( 'manage_bt-players_posts_custom_column', array( $this, 'populate_staff_columns' ), 10, 2 );
+			add_filter( 'manage_bt-staff_posts_columns', array( $this, 'set_staff_posts_columns' ) );
+			add_action( 'manage_bt-staff_posts_custom_column', array( $this, 'populate_staff_columns' ), 10, 2 );
 		}
 
 		public function set_staff_posts_columns( $columns ) {
 			$columns = array(
-				'cb'                       => $columns['cb'],
-				'player_photo'             => '',
-				'title'                    => __( 'Team member', $this->plugin_name ),
-				'player_number'            => __( 'Number', $this->plugin_name ),
-				'taxonomy-player-position' => __( 'Position', $this->plugin_name ),
-				'player_total_games'       => __( 'Total games', $this->plugin_name ),
-				'player_total_points'      => __( 'Total points', $this->plugin_name ),
-				'player_total_3_pointers'  => __( 'Total 3-pointers', $this->plugin_name ),
-				'date'                     => $columns['date'],
+				'cb'                      => $columns['cb'],
+				'member_photo'            => '',
+				'title'                   => __( 'Team member', $this->plugin_name ),
+				'taxonomy-staff-position' => __( 'Position', $this->plugin_name ),
+				'member_birthdate'        => __( 'Birthday', $this->plugin_name ),
+				'member_in_club_since'    => __( 'In club since', $this->plugin_name ),
+				'date'                    => $columns['date'],
 			);
 
 			return $columns;
 		}
 
 		public function populate_staff_columns( $column, $post_id ) {
-			if ( 'player_photo' === $column ) {
-				echo get_the_post_thumbnail( $post_id, array(80, 80) );
+			if ( 'member_photo' === $column ) {
+				if (has_post_thumbnail($post_id) == true) {
+					echo get_the_post_thumbnail( $post_id, array(80, 80) );
+				} else {
+					echo '<img src="' . BASKETBALL_TEAM_MANAGER_PLUGIN_URL . 'admin/img/staff-member-default.png' . '" alt="" style="width: 80px">';
+				}
 			}
 
-			if ( 'player_number' === $column ) {
-				echo get_post_meta( $post_id, 'player_number', true );
+			if ( 'member_birthdate' === $column ) {
+				echo get_post_meta( $post_id, 'member_birthdate', true );
 			}
 
-			if ( 'player_total_games' === $column ) {
-				echo get_post_meta( $post_id, 'player_total_games', true );
+			if ( 'member_in_club_since' === $column ) {
+				echo get_post_meta( $post_id, 'member_in_club_since', true );
 			}
-
-			if ( 'player_total_points' === $column ) {
-				echo get_post_meta( $post_id, 'player_total_points', true );
-			}
-
-			if ( 'player_total_3_pointers' === $column ) {
-				echo get_post_meta( $post_id, 'player_total_3_pointers', true );
-			}
-
 		}
 	}
 }
