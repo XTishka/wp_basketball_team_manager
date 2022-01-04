@@ -1,8 +1,8 @@
 <?php
 
-if ( ! class_exists( 'Admin_All_Posts_Custom_Column' ) ) {
+if ( ! class_exists( 'Admin_Games_Index' ) ) {
 
-	class Admin_All_Posts_Custom_Column {
+	class Admin_Games_Index {
 
 		public $plugin_name;
 
@@ -20,14 +20,17 @@ if ( ! class_exists( 'Admin_All_Posts_Custom_Column' ) ) {
 
 		public function set_game_posts_columns( $columns ) {
 			$columns = array(
-				'cb'          => $columns['cb'],
-				'title'       => __( 'Game Date', $this->plugin_name ),
-				'home_team'   => __( 'Home team', $this->plugin_name ),
-				'score'       => __( 'Score', $this->plugin_name ),
-				'guest_team'  => __( 'Guest team', $this->plugin_name ),
-				'seasons'     => __( 'Season', $this->plugin_name ),
-				'tournaments' => __( 'Tournament', $this->plugin_name ),
-				'date'          => $columns['date'],
+				'cb'                   => $columns['cb'],
+				'title'                => __( 'Game Date', $this->plugin_name ),
+				'home_team'            => __( 'Home team', $this->plugin_name ),
+				'score'                => __( 'Score', $this->plugin_name ),
+				'guest_team'           => __( 'Guest team', $this->plugin_name ),
+//				'seasons'              => __( 'Season', $this->plugin_name ),
+				'taxonomy-seasons'     => __( 'Season', $this->plugin_name ),
+				'taxonomy-tournaments' => __( 'Tournament', $this->plugin_name ),
+				'taxonomy-arenas'      => __( 'Arena', $this->plugin_name ),
+//				'tournaments'          => __( 'Tournament', $this->plugin_name ),
+				'date'                 => $columns['date'],
 			);
 
 			return $columns;
@@ -95,7 +98,7 @@ if ( ! class_exists( 'Admin_All_Posts_Custom_Column' ) ) {
 
 			if ( ! empty( $homeTeamScore ) and ! empty( $guestTeamScore ) ) {
 				$score .= '<div style="color: ' . $color . '">';
-				$score .=  $homeTeamScore . ' :: ' . $guestTeamScore . '<br>' . $result;
+				$score .= $homeTeamScore . ' :: ' . $guestTeamScore . '<br>' . $result;
 				$score .= '</div>';
 			} else {
 				$score .= __( 'No game results', $this->plugin_name );

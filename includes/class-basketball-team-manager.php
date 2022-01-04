@@ -116,10 +116,10 @@ class Basketball_Team_Manager {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-games-index.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-all-posts-custom-column.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-index.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-index.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
@@ -202,7 +202,7 @@ class Basketball_Team_Manager {
 		$gameTVChannelLogo->init();
 
 		// All posts custom columns
-		$gameDateColumn = new Admin_All_Posts_Custom_Column( $this->plugin_name );
+		$gameDateColumn = new Admin_Games_Index( $this->plugin_name );
 		$gameDateColumn->init();
 
 		// Taxonomy filters
