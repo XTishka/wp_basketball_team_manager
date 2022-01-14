@@ -2,22 +2,22 @@
 
     $(document).ready(function () {
 
-        $("#game_home_team").selectize({
+        $("#taxonomy_game_home_team").selectize({
             create: true,
             sortField: "text",
         });
 
-        $("#game_guest_team").selectize({
+        $("#taxonomy_game_guest_team").selectize({
             create: true,
             sortField: "text",
         });
 
-        $("#game_arena").selectize({
+        $("#taxonomy_game_arena").selectize({
             create: true,
             sortField: "text",
         });
 
-        $("#game_sponsor").selectize({
+        $("#taxonomy_game_sponsor").selectize({
             create: true,
             sortField: "text",
         });

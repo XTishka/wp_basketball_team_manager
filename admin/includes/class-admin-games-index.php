@@ -7,7 +7,7 @@ if ( ! class_exists( 'Admin_Games_Index' ) ) {
 		public $plugin_name;
 
 		// TODO: get team ID from configs
-		public $my_team_id = 7;
+		public $my_team_id = 615;
 
 		public function __construct( $plugin_name ) {
 			$this->plugin_name = $plugin_name;
@@ -25,11 +25,9 @@ if ( ! class_exists( 'Admin_Games_Index' ) ) {
 				'home_team'            => __( 'Home team', $this->plugin_name ),
 				'score'                => __( 'Score', $this->plugin_name ),
 				'guest_team'           => __( 'Guest team', $this->plugin_name ),
-//				'seasons'              => __( 'Season', $this->plugin_name ),
 				'taxonomy-seasons'     => __( 'Season', $this->plugin_name ),
 				'taxonomy-tournaments' => __( 'Tournament', $this->plugin_name ),
 				'taxonomy-arenas'      => __( 'Arena', $this->plugin_name ),
-//				'tournaments'          => __( 'Tournament', $this->plugin_name ),
 				'date'                 => $columns['date'],
 			);
 
@@ -38,24 +36,23 @@ if ( ! class_exists( 'Admin_Games_Index' ) ) {
 
 		public function populate_game_columns( $column, $post_id ) {
 			if ( 'home_team' === $column ) {
-				echo $this->get_term_name( $post_id, 'game_home_team', 'teams' );
+				echo $this->get_team_name( $post_id, 'teams', 'taxonomy_game_home_team' );
+			}
+
+			if ( 'guest_team' === $column ) {
+				echo $this->get_team_name( $post_id, 'teams', 'taxonomy_game_guest_team' );
 			}
 
 			if ( 'score' === $column ) {
 				echo $this->get_score( $post_id );
 			}
+		}
 
-			if ( 'guest_team' === $column ) {
-				echo $this->get_term_name( $post_id, 'game_guest_team', 'teams' );
-			}
+		private function get_team_name( $post_id, $taxonomy, $meta_field ) {
+			$home_team = get_post_meta( $post_id, $meta_field, true );
+			$term      = get_term( $home_team, $taxonomy );
 
-			if ( 'seasons' === $column ) {
-				echo $this->get_term_name( $post_id, 'game_season', 'seasons' );
-			}
-
-			if ( 'tournaments' === $column ) {
-				echo $this->get_term_name( $post_id, 'game_tournament', 'tournaments' );
-			}
+			return $term->name;
 		}
 
 		private function get_term_name( $post_id, $key, $taxonomy ) {
@@ -66,8 +63,8 @@ if ( ! class_exists( 'Admin_Games_Index' ) ) {
 		}
 
 		private function get_score( $post_id ) {
-			$home_team      = get_post_meta( $post_id, 'game_home_team', true );
-			$guest_team     = get_post_meta( $post_id, 'game_guest_team', true );
+			$home_team      = get_post_meta( $post_id, 'taxonomy_game_home_team', true );
+			$guest_team     = get_post_meta( $post_id, 'taxonomy_game_guest_team', true );
 			$homeTeamScore  = get_post_meta( $post_id, 'game_home_team_score', true );
 			$guestTeamScore = get_post_meta( $post_id, 'game_guest_team_score', true );
 			$score          = '';

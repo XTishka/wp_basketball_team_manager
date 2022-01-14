@@ -249,15 +249,15 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 		$gameData = array(
 			'date'             => get_post_meta( $post->ID, 'game_date', 1 ),
 			'time'             => get_post_meta( $post->ID, 'game_time', 1 ),
-			'arena'            => get_post_meta( $post->ID, 'game_arena', 1 ),
-			'home_team'        => get_post_meta( $post->ID, 'game_home_team', 1 ),
-			'guest_team'       => get_post_meta( $post->ID, 'game_guest_team', 1 ),
+			'arena'            => get_post_meta( $post->ID, 'taxonomy_game_arena', 1 ),
+			'home_team'        => get_post_meta( $post->ID, 'taxonomy_game_home_team', 1 ),
+			'guest_team'       => get_post_meta( $post->ID, 'taxonomy_game_guest_team', 1 ),
 			'home_team_score'  => get_post_meta( $post->ID, 'game_home_team_score', 1 ),
 			'guest_team_score' => get_post_meta( $post->ID, 'game_guest_team_score', 1 ),
-			'season'           => get_post_meta( $post->ID, 'game_season', 1 ),
-			'tournament'       => get_post_meta( $post->ID, 'game_tournament', 1 ),
+			'season'           => get_post_meta( $post->ID, 'taxonomy_game_season', 1 ),
+			'tournament'       => get_post_meta( $post->ID, 'taxonomy_game_tournament', 1 ),
 			'statistics_link'  => get_post_meta( $post->ID, 'game_statistics_link', 1 ),
-			'tv'               => get_post_meta( $post->ID, 'game_tv', 1 ),
+			'tv'               => get_post_meta( $post->ID, 'taxonomy_game_tv', 1 ),
 			'tv_link'          => get_post_meta( $post->ID, 'game_tv_link', 1 ),
 			'sponsor'          => get_post_meta( $post->ID, 'game_sponsor', 1 ),
 		);
@@ -334,19 +334,19 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 		$post_type = $_POST['post_type'] ?? '';
 		if ( isset( $_POST ) and $post_type == 'bt-games' ) {
 			$gameData = array(
-				'game_home_team',
+				'taxonomy_game_home_team',
 				'game_home_team_score',
 				'game_guest_team_score',
-				'game_guest_team',
+				'taxonomy_game_guest_team',
 				'game_date',
 				'game_time',
-				'game_arena',
-				'game_season',
-				'game_tournament',
+				'taxonomy_game_arena',
+				'taxonomy_game_season',
+				'taxonomy_game_tournament',
 				'game_statistics_link',
-				'game_tv',
+				'taxonomy_game_tv',
 				'game_tv_link',
-				'game_sponsor',
+				'taxonomy_game_sponsor',
 			);
 
 			if ( ! wp_verify_nonce( $_POST['bt_game_noncename'], plugin_basename( __FILE__ ) ) ) {
@@ -366,24 +366,26 @@ class Admin_Game_Posts extends Basketball_Team_Manager_Admin {
 			}
 
 			$this->updatePostTaxonomyTeams( $post_id );
-			$this->updatePostTaxonomySingle( $post_id, $_POST['game_arena'], 'arenas' );
-			$this->updatePostTaxonomySingle( $post_id, $_POST['game_season'], 'seasons' );
-			$this->updatePostTaxonomySingle( $post_id, $_POST['game_tournament'], 'tournaments' );
-			$this->updatePostTaxonomySingle( $post_id, $_POST['game_tv'], 'tv_channels' );
-			$this->updatePostTaxonomySingle( $post_id, $_POST['game_sponsor'], 'sponsors' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['taxonomy_game_arena'], 'arenas' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['taxonomy_game_season'], 'seasons' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['taxonomy_game_tournament'], 'tournaments' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['taxonomy_game_tv'], 'tv_channels' );
+			$this->updatePostTaxonomySingle( $post_id, $_POST['taxonomy_game_sponsor'], 'sponsors' );
 		}
 	}
 
 	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {
-		$term = get_term( $termData, $taxonomy );
-		if ( isset( $term ) ) {
-			wp_set_object_terms( $post_id, $term->term_id, $taxonomy );
+		if ($termData != '') {
+			$term = get_term( $termData, $taxonomy );
+			if ( isset( $term ) ) {
+				wp_set_object_terms( $post_id, $term->term_id, $taxonomy );
+			}
 		}
 	}
 
 	private function updatePostTaxonomyTeams( $post_id ) {
-		$homeTeamTerm  = get_term( $_POST['game_home_team'], 'teams' );
-		$guestTeamTerm = get_term( $_POST['game_guest_team'], 'teams' );
+		$homeTeamTerm  = get_term( $_POST['taxonomy_game_home_team'], 'teams' );
+		$guestTeamTerm = get_term( $_POST['taxonomy_game_guest_team'], 'teams' );
 		if ( isset( $homeTeamTerm ) and isset( $guestTeamTerm ) ) {
 			wp_set_object_terms( $post_id, array( $homeTeamTerm->term_id, $guestTeamTerm->term_id ), 'teams' );
 		}
