@@ -40,7 +40,7 @@ if (!class_exists('Admin_Players_Index')) {
 		{
 			if ('player_photo' === $column) {
 				if (has_post_thumbnail($post_id) == true) {
-					echo get_the_post_thumbnail($post_id, array(80, 80));
+					echo get_the_post_thumbnail($post_id, array(200, 50));
 				} else {
 					echo '<img src="' . BASKETBALL_TEAM_MANAGER_PLUGIN_URL . 'admin/img/player-default.png' . '" alt="" style="width: 80px">';
 				}

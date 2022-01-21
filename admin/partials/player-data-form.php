@@ -1,7 +1,7 @@
 <?php
-function player_data_form($post, $plugin_name, $playerData, $positionTerms, $statusTerms)
-{ ?>
-
+function player_data_form($post, $plugin_name, $playerData, $positionTerms, $statusTerms, $playerPositions, $playerStatus)
+{
+?>
     <div class="player-wrapper">
         <div class="featured_image" style="max-height: 300px; overflow: hidden;">
             <?php $featured_image = get_the_post_thumbnail_url($post->ID, 'thumbnail') ?? '' ?>
@@ -21,9 +21,9 @@ function player_data_form($post, $plugin_name, $playerData, $positionTerms, $sta
 
                 <div class="player_position">
                     <label for="player_position"><?php echo __("Position", $plugin_name); ?></label>
-                    <select name="player_position" id="player_position">
+                    <select name="player_position[]" id="player_position" multiple="multiple">
                         <?php foreach ($positionTerms as $position) : ?>
-                            <?php $selected = ($playerData['player_position'] == $position->term_id ? 'selected' : '') ?>
+                            <?php $selected = (in_array($position->name, $playerPositions) ? 'selected' : '') ?>
                             <option value="<?php echo $position->term_id ?>" <?php echo $selected ?>>
                                 <?php echo $position->name ?>
                             </option>
@@ -40,7 +40,7 @@ function player_data_form($post, $plugin_name, $playerData, $positionTerms, $sta
                     <label for="player_status"><?php echo __("Status", $plugin_name); ?></label>
                     <select name="player_status" id="player_status" class="game-status">
                         <?php foreach ($statusTerms as $status) : ?>
-                            <?php $selected = ($playerData['player_status'] == $status->term_id ? 'selected' : '') ?>
+                            <?php $selected = (in_array($status->name, $playerStatus) ? 'selected' : '') ?>
                             <option value="<?php echo $status->term_id ?>" <?php echo $selected ?>>
                                 <?php echo $status->name ?>
                             </option>
@@ -93,7 +93,7 @@ function player_data_form($post, $plugin_name, $playerData, $positionTerms, $sta
     <script>
         jQuery('#player_birthdate').datetimepicker({
             timepicker: false,
-            format: 'Y-m-d'
+            format: 'd-m-Y'
         });
     </script>
 

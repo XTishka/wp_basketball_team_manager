@@ -133,6 +133,9 @@
 .player-wrapper .form select {
     width: 211px;
 }
+.player_position .selectize-control {
+    width: 200px;
+}
 
 .video-wrapper .row {
     margin: 10px 0;

@@ -146,6 +146,22 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin
 			'player_height'           => get_post_meta($post->ID, 'player_height', 1),
 		);
 
+		$playerPositions = array();
+		$playerPositionsTaxonomies = get_the_terms($post->ID, 'player-position');
+		if (!empty($playerPositionsTaxonomies)) {
+			foreach ($playerPositionsTaxonomies as $taxonomy) {
+				array_push($playerPositions, $taxonomy->name);
+			}
+		}
+
+		$playerStatus = array();
+		$playerStatusTaxonomies = get_the_terms($post->ID, 'player-status');
+		if (!empty($playerStatusTaxonomies)) {
+			foreach ($playerStatusTaxonomies as $taxonomy) {
+				array_push($playerStatus, $taxonomy->name);
+			}
+		}
+
 		$positionTerms = get_terms(
 			array(
 				'taxonomy'   => 'player-position',
@@ -166,7 +182,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin
 
 		ob_start();
 		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php');
-		player_data_form($post, $this->plugin_name, $playerData, $positionTerms, $statusTerms);
+		player_data_form($post, $this->plugin_name, $playerData, $positionTerms, $statusTerms, $playerPositions, $playerStatus);
 		$form = ob_get_contents();
 		ob_end_clean();
 
@@ -215,7 +231,7 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin
 			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
 		}
 
-		$this->updatePostTaxonomySingle($post_id, $_POST['player_position'], 'player-position');
+		$this->updatePostTaxonomyMultiple($post_id, $_POST['player_position'], 'player-position');
 		$this->updatePostTaxonomySingle($post_id, $_POST['player_status'], 'player-status');
 	}
 
@@ -225,5 +241,17 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin
 		if (isset($term)) {
 			wp_set_object_terms($post_id, $term->term_id, $taxonomy);
 		}
+	}
+
+	private function updatePostTaxonomyMultiple($post_id, $termData, $taxonomy)
+	{
+		$terms = array();
+		foreach ($termData as $term) {
+			$termName = get_term($term, $taxonomy);
+			if (isset($termName)) {
+				array_push($terms, $termName->name);
+			}
+		}
+		wp_set_object_terms($post_id, $terms, $taxonomy);
 	}
 }
