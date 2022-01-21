@@ -21,6 +21,12 @@
             create: true,
             sortField: "text",
         });
+
+        $("#sponsors_category").selectize({
+            create: true,
+            sortField: "text",
+            maxOptions: 3
+        });
     });
 
 })(jQuery);

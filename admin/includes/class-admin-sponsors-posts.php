@@ -1,31 +1,31 @@
 <?php
 
-class Admin_Video_Posts extends Basketball_Team_Manager_Admin
+class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 {
 
 	private $plugin_name;
 
-	public function register_video_posts()
+	public function register_sponsor_posts()
 	{
 		$labels = [
-			'name'               => _x('Videos', 'Post Type General Name', $this->plugin_name),
-			'singular_name'      => _x('Video', 'Post Type Singular Name', $this->plugin_name),
-			'menu_name'          => __('BT Videos', $this->plugin_name),
-			'parent_item_colon'  => __('Parent Video', $this->plugin_name),
-			'all_items'          => __('All Videos', $this->plugin_name),
-			'view_item'          => __('View Video', $this->plugin_name),
-			'add_new_item'       => __('Add New Video', $this->plugin_name),
-			'add_new'            => __('Add Video', $this->plugin_name),
-			'edit_item'          => __('Edit Video', $this->plugin_name),
-			'update_item'        => __('Update Video', $this->plugin_name),
-			'search_items'       => __('Search Video', $this->plugin_name),
+			'name'               => _x('Sponsors', 'Post Type General Name', $this->plugin_name),
+			'singular_name'      => _x('Sponsor', 'Post Type Singular Name', $this->plugin_name),
+			'menu_name'          => __('BT Sponsors', $this->plugin_name),
+			'parent_item_colon'  => __('Parent Sponsor', $this->plugin_name),
+			'all_items'          => __('All Sponsors', $this->plugin_name),
+			'view_item'          => __('View Sponsor', $this->plugin_name),
+			'add_new_item'       => __('Add New Sponsor', $this->plugin_name),
+			'add_new'            => __('Add Sponsor', $this->plugin_name),
+			'edit_item'          => __('Edit Sponsor', $this->plugin_name),
+			'update_item'        => __('Update Sponsor', $this->plugin_name),
+			'search_items'       => __('Search Sponsor', $this->plugin_name),
 			'not_found'          => __('Not Found', $this->plugin_name),
 			'not_found_in_trash' => __('Not found in Trash', $this->plugin_name),
 		];
 
 		$args = [
-			'label'               => __('bt-videos', $this->plugin_name),
-			'description'         => __('Team videos', $this->plugin_name),
+			'label'               => __('bt-sponsors', $this->plugin_name),
+			'description'         => __('Team sponsors', $this->plugin_name),
 			'labels'              => $labels,
 			'supports'            => [
 				'title',
@@ -50,7 +50,7 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 
 		];
 
-		register_post_type('bt-videos', $args);
+		register_post_type('bt-sponsors', $args);
 	}
 
 	public function register_category_taxonomy()
@@ -73,44 +73,42 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 			'menu_name'                  => __('Categories'),
 		);
 
-		register_taxonomy('video-category', 'bt-videos', array(
+		register_taxonomy('sponsor-category', 'bt-sponsors', array(
 			'hierarchical'      => true,
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array('slug' => 'video-category'),
+			'rewrite'           => array('slug' => 'sponsor-category'),
 		));
 	}
 
-	public function video_meta_box()
+	public function sponsor_meta_box()
 	{
 		add_meta_box(
-			'btm-video-meta_box',
-			'Video data',
-			array($this, 'video_meta_box_callback'),
-			array('bt-videos'),
+			'btm-sponsor-meta_box',
+			'Sponsor data',
+			array($this, 'sponsor_meta_box_callback'),
+			array('bt-sponsors'),
 			'advanced',
 			'high'
 		);
 	}
 
-	public function video_meta_box_callback($post, $meta)
+	public function sponsor_meta_box_callback($post, $meta)
 	{
 		$screens = $meta['args'];
-		wp_nonce_field(plugin_basename(__FILE__), 'bt_video_noncename');
+		wp_nonce_field(plugin_basename(__FILE__), 'bt_sponsor_noncename');
 
-		$playerData = array(
-			'video_youtube_id' => get_post_meta($post->ID, 'video_youtube_id', 1),
-			'video_link'       => get_post_meta($post->ID, 'video_link', 1),
-			'video_embed'      => get_post_meta($post->ID, 'video_embed', 1),
-			'video_category'   => get_post_meta($post->ID, 'video_category', 1),
+		$sponsorData = array(
+			'sponsors_link' => get_post_meta($post->ID, 'sponsors_link', 1),
+			'sponsors_category'   => get_post_meta($post->ID, 'sponsors_category', 1),
 		);
 
 		$categoryTerms = get_terms(
 			array(
-				'taxonomy'   => 'video-category',
+				'taxonomy'   => 'sponsor-category',
 				'hide_empty' => false,
 				'orderby'    => 'id',
 				'order'      => 'ASC',
@@ -118,33 +116,31 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 		);
 
 		ob_start();
-		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/video-data-form.php');
-		video_data_form($post, $this->plugin_name, $playerData, $categoryTerms);
+		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/sponsor-data-form.php');
+		sponsor_data_form($post, $this->plugin_name, $sponsorData, $categoryTerms);
 		$form = ob_get_contents();
 		ob_end_clean();
 
 		echo $form;
 	}
 
-	public function remove_video_meta_box_duplicate()
+	public function remove_sponsor_meta_box_duplicate()
 	{
 		global $post, $wp_meta_boxes;
-		unset($wp_meta_boxes['bt-videos']['advanced']);
+		unset($wp_meta_boxes['bt-sponsors']['advanced']);
 	}
 
-	public function save_video_data($post_id)
+	public function save_sponsor_data($post_id)
 	{
 		$post_type = $_POST['post_type'] ?? '';
-		if (isset($_POST) and $post_type == 'bt-videos') {
+		if (isset($_POST) and $post_type == 'bt-sponsors') {
 			$playerData = array(
-				'video_youtube_id',
-				'video_link',
-				'video_embed',
-				'video_category',
+				'sponsors_link',
+				'sponsors_category',
 			);
 		}
 
-		$noncename = $_POST['bt_video_noncename'] ?? '';
+		$noncename = $_POST['bt_sponsor_noncename'] ?? '';
 		if (!wp_verify_nonce($noncename, plugin_basename(__FILE__))) {
 			return;
 		}
@@ -161,7 +157,7 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
 		}
 
-		$this->updatePostTaxonomySingle($post_id, $_POST['video_category'], 'video-category');
+		$this->updatePostTaxonomySingle($post_id, $_POST['sponsors_category'], 'sponsor-category');
 	}
 
 	private function updatePostTaxonomySingle($post_id, $termData, $taxonomy)

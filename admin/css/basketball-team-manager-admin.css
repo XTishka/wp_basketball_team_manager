@@ -148,6 +148,26 @@
     width: 70%;
 }
 
+.sponsor-wrapper .row {
+    margin: 10px 0;
+    display: flex;
+}
+.sponsor-wrapper .row label {
+    display: inline-block;
+    width: 10%;
+    font-weight: 700;
+}
+.sponsor-wrapper .row input,
+.sponsor-wrapper .row select {
+    width: 70%;
+}
+.sponsor-wrapper .row .selectize-control {
+    width: 70%;
+}
+#btm-sponsor-meta_box {
+    padding-bottom: 60px;
+}
+
 
     /* Players table */
 .widefat thead tr th#player_photo {
