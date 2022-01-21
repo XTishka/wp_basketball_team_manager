@@ -39,6 +39,13 @@
             sortField: "text",
             delimiter: '/'
         });
+
+        $("#video_category").selectize({
+            create: true,
+            sortField: "text",
+            delimiter: '/',
+            placeholder: 'No category selected'
+        });
     });
 
 })(jQuery);

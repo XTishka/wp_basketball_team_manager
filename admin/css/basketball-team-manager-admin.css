@@ -150,6 +150,9 @@
 .video-wrapper .row select {
     width: 70%;
 }
+.video-wrapper .row .selectize-control {
+    width: 70%;
+}
 
 .sponsor-wrapper .row {
     margin: 10px 0;

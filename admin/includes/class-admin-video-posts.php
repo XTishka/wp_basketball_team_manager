@@ -101,6 +101,14 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 		$screens = $meta['args'];
 		wp_nonce_field(plugin_basename(__FILE__), 'bt_video_noncename');
 
+		$videoCategories = array();
+		$videoCategoriesTaxonomies = get_the_terms($post->ID, 'video-category');
+		if (!empty($videoCategoriesTaxonomies)) {
+			foreach ($videoCategoriesTaxonomies as $taxonomy) {
+				array_push($videoCategories, $taxonomy->name);
+			}
+		}
+
 		$playerData = array(
 			'video_youtube_id' => get_post_meta($post->ID, 'video_youtube_id', 1),
 			'video_link'       => get_post_meta($post->ID, 'video_link', 1),
@@ -119,7 +127,7 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 
 		ob_start();
 		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/video-data-form.php');
-		video_data_form($post, $this->plugin_name, $playerData, $categoryTerms);
+		video_data_form($post, $this->plugin_name, $playerData, $categoryTerms, $videoCategories);
 		$form = ob_get_contents();
 		ob_end_clean();
 
@@ -161,7 +169,7 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
 		}
 
-		$this->updatePostTaxonomySingle($post_id, $_POST['video_category'], 'video-category');
+		$this->updatePostTaxonomyMultiple($post_id, $_POST['video_category'], 'video-category');
 	}
 
 	private function updatePostTaxonomySingle($post_id, $termData, $taxonomy)
@@ -170,5 +178,17 @@ class Admin_Video_Posts extends Basketball_Team_Manager_Admin
 		if (isset($term)) {
 			wp_set_object_terms($post_id, $term->term_id, $taxonomy);
 		}
+	}
+
+	private function updatePostTaxonomyMultiple($post_id, $termData, $taxonomy)
+	{
+		$terms = array();
+		foreach ($termData as $term) {
+			$termName = get_term($term, $taxonomy);
+			if (isset($termName)) {
+				array_push($terms, $termName->name);
+			}
+		}
+		wp_set_object_terms($post_id, $terms, $taxonomy);
 	}
 }
