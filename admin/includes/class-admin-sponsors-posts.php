@@ -106,6 +106,14 @@ class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 			'sponsors_category'   => get_post_meta($post->ID, 'sponsors_category', 1),
 		);
 
+		$sponsorCategories = array();
+		$sponsorCategoriesTaxonomies = get_the_terms($post->ID, 'sponsor-category');
+		if (!empty($sponsorCategoriesTaxonomies)) {
+			foreach ($sponsorCategoriesTaxonomies as $taxonomy) {
+				array_push($sponsorCategories, $taxonomy->name);
+			}
+		}
+
 		$categoryTerms = get_terms(
 			array(
 				'taxonomy'   => 'sponsor-category',
@@ -117,7 +125,7 @@ class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 
 		ob_start();
 		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/sponsor-data-form.php');
-		sponsor_data_form($post, $this->plugin_name, $sponsorData, $categoryTerms);
+		sponsor_data_form($post, $this->plugin_name, $sponsorData, $categoryTerms, $sponsorCategories);
 		$form = ob_get_contents();
 		ob_end_clean();
 
