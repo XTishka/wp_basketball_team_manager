@@ -17,10 +17,10 @@
             sortField: "text",
         });
 
-        $("#taxonomy_game_sponsor").selectize({
-            create: true,
-            sortField: "text",
-        });
+        // $("#taxonomy_game_sponsor").selectize({
+        //     create: true,
+        //     sortField: "text",
+        // });
 
         $("#sponsors_category").selectize({
             create: true,
@@ -41,6 +41,13 @@
         });
 
         $("#video_category").selectize({
+            create: true,
+            sortField: "text",
+            delimiter: '/',
+            placeholder: 'No category selected'
+        });
+
+        $("#taxonomy_subcategory").selectize({
             create: true,
             sortField: "text",
             delimiter: '/',

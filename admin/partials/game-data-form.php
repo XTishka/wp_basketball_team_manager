@@ -1,5 +1,5 @@
 <?php
-function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms)
+function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms, $arenas, $tournaments, $tv_channels, $teams)
 { ?>
 
     <div class="game-row">
@@ -54,9 +54,8 @@ function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $sea
                 <label for="taxonomy_game_arena"><?php echo __("Game Arena", $plugin_name); ?></label>
                 <select name="taxonomy_game_arena" id="taxonomy_game_arena" class="game-arena">
                     <option value="">Select a value ...</option>
-                    <option value="__blank__">None</option>
                     <?php foreach ($arenasTerms as $arena) : ?>
-                        <?php $selected = ($gameData['arena'] == $arena->term_id ? 'selected' : '') ?>
+                        <?php $selected = (in_array($arena->name, $arenas) ? 'selected' : '') ?>
                         <option value="<?php echo $arena->term_id ?>" <?php echo $selected ?>>
                             <?php echo $arena->name ?>
                         </option>
@@ -80,8 +79,9 @@ function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $sea
             <div class="tournament">
                 <label for="taxonomy_game_tournament"><?php echo __("Tournament", $plugin_name); ?></label>
                 <select name="taxonomy_game_tournament" id="taxonomy_game_tournament" class="game-tournament">
+                    <option value="">Select a value ...</option>
                     <?php foreach ($tournamentsTerms as $tournament) : ?>
-                        <?php $selected = ($gameData['tournament'] == $tournament->term_id ? 'selected' : '') ?>
+                        <?php $selected = (in_array($tournament->name, $tournaments) ? 'selected' : '') ?>
                         <option value="<?php echo $tournament->term_id ?>" <?php echo $selected ?>>
                             <?php echo $tournament->name ?>
                         </option>
@@ -89,8 +89,8 @@ function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $sea
                 </select>
             </div>
             <div class="sponsor">
-                <label for="taxonomy_game_sponsor"><?php echo __("Game Sponsor", $plugin_name); ?></label>
-                <select name="taxonomy_game_sponsor" id="taxonomy_game_sponsor" class="game-sponsor">
+                <label for="taxonomy_game_sponsor" style="display: none"><?php echo __("Game Sponsor", $plugin_name); ?></label>
+                <select name="taxonomy_game_sponsor" id="taxonomy_game_sponsor" class="game-sponsor" style="display: none;">
                     <option value="">Select a value ...</option>
                     <option value="__blank__">None</option>
                     <?php foreach ($sponsorsTerms as $sponsor) : ?>
@@ -115,8 +115,9 @@ function game_data_form($gameData, $plugin_name, $teamsTerms, $arenasTerms, $sea
             <div>
                 <label for="taxonomy_game_tv"><?php echo __("TV", $plugin_name); ?></label>
                 <select name="taxonomy_game_tv" id="taxonomy_game_tv">
+                    <option value="">Select a value ...</option>
                     <?php foreach ($tvTerms as $tv) : ?>
-                        <?php $selected = ($gameData['tv'] == $tv->term_id ? 'selected' : '') ?>
+                        <?php $selected = (in_array($tv->name, $tv_channels) ? 'selected' : '') ?>
                         <option value="<?php echo $tv->term_id ?>" <?php echo $selected ?>>
                             <?php echo $tv->name ?>
                         </option>

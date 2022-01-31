@@ -128,6 +128,7 @@ class Basketball_Team_Manager
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-video-posts.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-filters.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-field-image.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-field-subcategory.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -209,6 +210,13 @@ class Basketball_Team_Manager
 
 		$gameSponsorLogo = new Admin_Taxonomy_Field_Image('sponsors');
 		$gameSponsorLogo->init();
+
+		$gameTournamentsLogo = new Admin_Taxonomy_Field_Image( 'tournaments' );
+		$gameTournamentsLogo->init();
+
+		// Taxonomy field Subcategory
+		$gameSponsorCategory = new Admin_Taxonomy_Field_Subcategory('sponsors');
+		$gameSponsorCategory->init();
 
 		// All posts custom columns
 		$gameDateColumn = new Admin_Games_Index($this->plugin_name);
