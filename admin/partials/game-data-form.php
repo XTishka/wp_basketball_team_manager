@@ -1,5 +1,7 @@
 <?php
-function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms ) { ?>
+function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $seasonsTerms, $tournamentsTerms, $tvTerms, $sponsorsTerms, $arenas, $tournaments, $tv_channels, $teams ) {
+
+	?>
 
     <div class="game-row">
         <div class="team-row">
@@ -8,9 +10,13 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
                 <div class="home-team">
                     <select name="taxonomy_game_home_team" id="taxonomy_game_home_team">
 						<?php foreach ( $teamsTerms as $team ) : ?>
-                            <?php $selected = ($gameData['home_team'] == $team->term_id ? 'selected' : '' ) ?>
-                            <option value="<?php echo $team->term_id ?>" <?php echo $selected ?> >
-	                            <?php echo $team->name ?>
+							<?php if ( ! empty( $gameData['home_team'] ) ) : ?>
+								<?php $selected = ( $gameData['home_team'] == $team->term_id ? 'selected' : '' ) ?>
+							<?php else : ?>
+								<?php $selected = ( esc_attr( get_option( 'btm_default_team' )) == $team->term_id ? 'selected' : '' ) ?>
+							<?php endif; ?>
+                            <option value="<?php echo $team->term_id ?>" <?php echo $selected ?>>
+								<?php echo $team->name ?>
                             </option>
 						<?php endforeach; ?>
                     </select>
@@ -27,14 +33,19 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
                 <div class="guest-team">
                     <select name="taxonomy_game_guest_team" id="taxonomy_game_guest_team">
 						<?php foreach ( $teamsTerms as $team ) : ?>
-							<?php $selected = ($gameData['guest_team'] == $team->term_id ? 'selected' : '' ) ?>
-                            <option value="<?php echo $team->term_id ?>" <?php echo $selected ?> >
-                                <?php echo $team->name ?>
+							<?php if ( ! empty( $gameData['guest_team'] ) ) : ?>
+								<?php $selected = ( $gameData['guest_team'] == $team->term_id ? 'selected' : '' ) ?>
+							<?php else : ?>
+								<?php $selected = ( esc_attr( get_option( 'btm_default_team' )) == $team->term_id ? 'selected' : '' ) ?>
+							<?php endif; ?>
+                            <option value="<?php echo $team->term_id ?>" <?php echo $selected ?>>
+								<?php echo $team->name ?>
                             </option>
 						<?php endforeach; ?>
                     </select>
                 </div>
-                <label class="guest" for="taxonomy_game_guest_team"><?php echo __( "Guest team", $plugin_name ); ?></label>
+                <label class="guest"
+                       for="taxonomy_game_guest_team"><?php echo __( "Guest team", $plugin_name ); ?></label>
             </div>
         </div>
     </div>
@@ -43,25 +54,26 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
         <div class="time-and-place-row">
             <div class="date">
                 <label for="game_date"><?php echo __( "Game Date", $plugin_name ); ?></label>
-                <input type="text" id="game_date" name="game_date" value="<?php echo $gameData['date']; ?>" autocomplete="off" />
+                <input type="text" id="game_date" name="game_date" value="<?php echo $gameData['date']; ?>"
+                       autocomplete="off"/>
             </div>
 
             <div class="time">
                 <label for="game_time"><?php echo __( "Game Time", $plugin_name ); ?></label>
-                <input type="text" id="game_time" name="game_time" value="<?php echo $gameData['time']; ?>"  autocomplete="off" />
+                <input type="text" id="game_time" name="game_time" value="<?php echo $gameData['time']; ?>"
+                       autocomplete="off"/>
             </div>
 
             <div class="arena">
                 <label for="taxonomy_game_arena"><?php echo __( "Game Arena", $plugin_name ); ?></label>
                 <select name="taxonomy_game_arena" id="taxonomy_game_arena" class="game-arena">
                     <option value="">Select a value ...</option>
-                    <option value="__blank__">None</option>
-	                <?php foreach ( $arenasTerms as $arena ) : ?>
-		                <?php $selected = ($gameData['arena'] == $arena->term_id ? 'selected' : '' ) ?>
-                        <option value="<?php echo $arena->term_id ?>" <?php echo $selected ?> >
-			                <?php echo $arena->name ?>
+					<?php foreach ( $arenasTerms as $arena ) : ?>
+						<?php $selected = ( in_array( $arena->name, $arenas ) ? 'selected' : '' ) ?>
+                        <option value="<?php echo $arena->term_id ?>" <?php echo $selected ?>>
+							<?php echo $arena->name ?>
                         </option>
-	                <?php endforeach; ?>
+					<?php endforeach; ?>
                 </select>
             </div>
         </div>
@@ -70,36 +82,39 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
             <div class="season">
                 <label for="taxonomy_game_season"><?php echo __( "Season", $plugin_name ); ?></label>
                 <select name="taxonomy_game_season" id="taxonomy_game_season" class="game-season">
-	                <?php foreach ( $seasonsTerms as $season ) : ?>
-		                <?php $selected = ($gameData['season'] == $season->term_id ? 'selected' : '' ) ?>
-                        <option value="<?php echo $season->term_id ?>" <?php echo $selected ?> >
-			                <?php echo $season->name ?>
+					<?php foreach ( $seasonsTerms as $season ) : ?>
+						<?php $selected = ( $gameData['season'] == $season->term_id ? 'selected' : '' ) ?>
+                        <option value="<?php echo $season->term_id ?>" <?php echo $selected ?>>
+							<?php echo $season->name ?>
                         </option>
-	                <?php endforeach; ?>
+					<?php endforeach; ?>
                 </select>
             </div>
             <div class="tournament">
                 <label for="taxonomy_game_tournament"><?php echo __( "Tournament", $plugin_name ); ?></label>
                 <select name="taxonomy_game_tournament" id="taxonomy_game_tournament" class="game-tournament">
-	                <?php foreach ( $tournamentsTerms as $tournament ) : ?>
-		                <?php $selected = ($gameData['tournament'] == $tournament->term_id ? 'selected' : '' ) ?>
-                        <option value="<?php echo $tournament->term_id ?>" <?php echo $selected ?> >
-			                <?php echo $tournament->name ?>
+                    <option value="">Select a value ...</option>
+					<?php foreach ( $tournamentsTerms as $tournament ) : ?>
+						<?php $selected = ( in_array( $tournament->name, $tournaments ) ? 'selected' : '' ) ?>
+                        <option value="<?php echo $tournament->term_id ?>" <?php echo $selected ?>>
+							<?php echo $tournament->name ?>
                         </option>
-	                <?php endforeach; ?>
+					<?php endforeach; ?>
                 </select>
             </div>
             <div class="sponsor">
-                <label for="taxonomy_game_sponsor"><?php echo __( "Game Sponsor", $plugin_name ); ?></label>
-                <select name="taxonomy_game_sponsor" id="taxonomy_game_sponsor" class="game-sponsor">
+                <label for="taxonomy_game_sponsor"
+                       style="display: none"><?php echo __( "Game Sponsor", $plugin_name ); ?></label>
+                <select name="taxonomy_game_sponsor" id="taxonomy_game_sponsor" class="game-sponsor"
+                        style="display: none;">
                     <option value="">Select a value ...</option>
                     <option value="__blank__">None</option>
-		            <?php foreach ( $sponsorsTerms as $sponsor ) : ?>
-			            <?php $selected = ($gameData['sponsor'] == $sponsor->term_id ? 'selected' : '' ) ?>
-                        <option value="<?php echo $sponsor->term_id ?>" <?php echo $selected ?> >
-				            <?php echo $sponsor->name ?>
+					<?php foreach ( $sponsorsTerms as $sponsor ) : ?>
+						<?php $selected = ( $gameData['sponsor'] == $sponsor->term_id ? 'selected' : '' ) ?>
+                        <option value="<?php echo $sponsor->term_id ?>" <?php echo $selected ?>>
+							<?php echo $sponsor->name ?>
                         </option>
-		            <?php endforeach; ?>
+					<?php endforeach; ?>
                 </select>
             </div>
         </div>
@@ -117,29 +132,29 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
             <div>
                 <label for="taxonomy_game_tv"><?php echo __( "TV", $plugin_name ); ?></label>
                 <select name="taxonomy_game_tv" id="taxonomy_game_tv">
-		            <?php foreach ( $tvTerms as $tv ) : ?>
-			            <?php $selected = ($gameData['tv'] == $tv->term_id ? 'selected' : '' ) ?>
-                        <option value="<?php echo $tv->term_id ?>" <?php echo $selected ?> >
-				            <?php echo $tv->name ?>
+                    <option value="">Select a value ...</option>
+					<?php foreach ( $tvTerms as $tv ) : ?>
+						<?php $selected = ( in_array( $tv->name, $tv_channels ) ? 'selected' : '' ) ?>
+                        <option value="<?php echo $tv->term_id ?>" <?php echo $selected ?>>
+							<?php echo $tv->name ?>
                         </option>
-		            <?php endforeach; ?>
+					<?php endforeach; ?>
                 </select>
             </div>
 
             <div>
                 <label for="game_tv_link"><?php echo __( "TV Link", $plugin_name ); ?></label>
-                <input type="text" id="game_tv_link" name="game_tv_link" value="<?php echo $gameData['tv_link']; ?>"  autocomplete="off" />
+                <input type="text" id="game_tv_link" name="game_tv_link" value="<?php echo $gameData['tv_link']; ?>"
+                       autocomplete="off"/>
             </div>
         </div>
     </div>
 
     <script>
-        jQuery('#game_date').datetimepicker(
-            {
-                timepicker: false,
-                format: 'Y-m-d'
-            }
-        );
+        jQuery('#game_date').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
 
         jQuery('#game_time').datetimepicker({
             datepicker: false,

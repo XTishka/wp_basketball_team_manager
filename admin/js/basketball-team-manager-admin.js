@@ -17,7 +17,44 @@
             sortField: "text",
         });
 
-        $("#taxonomy_game_sponsor").selectize({
+        // $("#taxonomy_game_sponsor").selectize({
+        //     create: true,
+        //     sortField: "text",
+        // });
+
+        $("#sponsors_category").selectize({
+            create: true,
+            sortField: "text",
+            maxOptions: 3
+        });
+
+        $("#sponsors_category").selectize({
+            create: true,
+            sortField: "text",
+            maxOptions: 3
+        });
+
+        $("#player_position").selectize({
+            create: true,
+            sortField: "text",
+            delimiter: '/'
+        });
+
+        $("#video_category").selectize({
+            create: true,
+            sortField: "text",
+            delimiter: '/',
+            placeholder: 'No category selected'
+        });
+
+        $("#taxonomy_subcategory").selectize({
+            create: true,
+            sortField: "text",
+            delimiter: '/',
+            placeholder: 'No category selected'
+        });
+
+        $("#btm_default_team").selectize({
             create: true,
             sortField: "text",
         });

@@ -26,7 +26,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
@@ -35,16 +35,17 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'BASKETBALL_TEAM_MANAGER_VERSION', '1.0.0' );
-define( 'BASKETBALL_TEAM_MANAGER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'BASKETBALL_TEAM_MANAGER_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define('BASKETBALL_TEAM_MANAGER_VERSION', '1.0.0');
+define('BASKETBALL_TEAM_MANAGER_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('BASKETBALL_TEAM_MANAGER_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-basketball-team-manager-activator.php
  */
-function activate_basketball_team_manager() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-basketball-team-manager-activator.php';
+function activate_basketball_team_manager()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-basketball-team-manager-activator.php';
 	Basketball_Team_Manager_Activator::activate();
 }
 
@@ -52,19 +53,20 @@ function activate_basketball_team_manager() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-basketball-team-manager-deactivator.php
  */
-function deactivate_basketball_team_manager() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-basketball-team-manager-deactivator.php';
+function deactivate_basketball_team_manager()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-basketball-team-manager-deactivator.php';
 	Basketball_Team_Manager_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_basketball_team_manager' );
-register_deactivation_hook( __FILE__, 'deactivate_basketball_team_manager' );
+register_activation_hook(__FILE__, 'activate_basketball_team_manager');
+register_deactivation_hook(__FILE__, 'deactivate_basketball_team_manager');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-basketball-team-manager.php';
+require plugin_dir_path(__FILE__) . 'includes/class-basketball-team-manager.php';
 
 /**
  * Begins execution of the plugin.
@@ -75,10 +77,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-basketball-team-manager.ph
  *
  * @since    1.0.0
  */
-function run_basketball_team_manager() {
+function run_basketball_team_manager()
+{
 
 	$plugin = new Basketball_Team_Manager();
 	$plugin->run();
-
 }
 run_basketball_team_manager();

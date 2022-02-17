@@ -1,29 +1,31 @@
 <?php
 
-class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
+class Admin_Players_Posts extends Basketball_Team_Manager_Admin
+{
 
 	private $plugin_name;
 
-	public function register_players_posts() {
+	public function register_players_posts()
+	{
 		$labels = [
-			'name'               => _x( 'Players', 'Post Type General Name', $this->plugin_name ),
-			'singular_name'      => _x( 'Player', 'Post Type Singular Name', $this->plugin_name ),
-			'menu_name'          => __( 'BT Team', $this->plugin_name ),
-			'parent_item_colon'  => __( 'Parent Player', $this->plugin_name ),
-			'all_items'          => __( 'All Players', $this->plugin_name ),
-			'view_item'          => __( 'View Player', $this->plugin_name ),
-			'add_new_item'       => __( 'Add New Player', $this->plugin_name ),
-			'add_new'            => __( 'Add Player', $this->plugin_name ),
-			'edit_item'          => __( 'Edit Player', $this->plugin_name ),
-			'update_item'        => __( 'Update Player', $this->plugin_name ),
-			'search_items'       => __( 'Search Player', $this->plugin_name ),
-			'not_found'          => __( 'Not Found', $this->plugin_name ),
-			'not_found_in_trash' => __( 'Not found in Trash', $this->plugin_name ),
+			'name'               => _x('Players', 'Post Type General Name', $this->plugin_name),
+			'singular_name'      => _x('Player', 'Post Type Singular Name', $this->plugin_name),
+			'menu_name'          => __('BT Team', $this->plugin_name),
+			'parent_item_colon'  => __('Parent Player', $this->plugin_name),
+			'all_items'          => __('All Players', $this->plugin_name),
+			'view_item'          => __('View Player', $this->plugin_name),
+			'add_new_item'       => __('Add New Player', $this->plugin_name),
+			'add_new'            => __('Add Player', $this->plugin_name),
+			'edit_item'          => __('Edit Player', $this->plugin_name),
+			'update_item'        => __('Update Player', $this->plugin_name),
+			'search_items'       => __('Search Player', $this->plugin_name),
+			'not_found'          => __('Not Found', $this->plugin_name),
+			'not_found_in_trash' => __('Not found in Trash', $this->plugin_name),
 		];
 
 		$args = [
-			'label'               => __( 'bt-players', $this->plugin_name ),
-			'description'         => __( 'Team players', $this->plugin_name ),
+			'label'               => __('bt-players', $this->plugin_name),
+			'description'         => __('Team players', $this->plugin_name),
 			'labels'              => $labels,
 			'supports'            => [
 				'title',
@@ -48,97 +50,117 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 
 		];
 
-		register_post_type( 'bt-players', $args );
+		register_post_type('bt-players', $args);
 	}
 
-	public function register_position_taxonomy() {
+	public function register_position_taxonomy()
+	{
 		$labels = array(
-			'name'                       => _x( 'Positions', 'taxonomy general name' ),
-			'singular_name'              => _x( 'Position', 'taxonomy singular name' ),
-			'search_items'               => __( 'Search Positions' ),
-			'popular_items'              => __( 'Popular Positions' ),
-			'all_items'                  => __( 'All Positions' ),
+			'name'                       => _x('Positions', 'taxonomy general name'),
+			'singular_name'              => _x('Position', 'taxonomy singular name'),
+			'search_items'               => __('Search Positions'),
+			'popular_items'              => __('Popular Positions'),
+			'all_items'                  => __('All Positions'),
 			'parent_item'                => null,
 			'parent_item_colon'          => null,
-			'edit_item'                  => __( 'Edit Position' ),
-			'update_item'                => __( 'Update Position' ),
-			'add_new_item'               => __( 'Add New Position' ),
-			'new_item_name'              => __( 'New Position Name' ),
-			'separate_items_with_commas' => __( 'Separate positions with commas' ),
-			'add_or_remove_items'        => __( 'Add or remove positions' ),
-			'choose_from_most_used'      => __( 'Choose from the most used positions' ),
-			'menu_name'                  => __( 'Positions' ),
+			'edit_item'                  => __('Edit Position'),
+			'update_item'                => __('Update Position'),
+			'add_new_item'               => __('Add New Position'),
+			'new_item_name'              => __('New Position Name'),
+			'separate_items_with_commas' => __('Separate positions with commas'),
+			'add_or_remove_items'        => __('Add or remove positions'),
+			'choose_from_most_used'      => __('Choose from the most used positions'),
+			'menu_name'                  => __('Positions'),
 		);
 
-		register_taxonomy( 'player-position', 'bt-players', array(
+		register_taxonomy('player-position', 'bt-players', array(
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'player-position' ),
-		) );
+			'rewrite'           => array('slug' => 'player-position'),
+		));
 	}
 
-	public function register_status_taxonomy() {
+	public function register_status_taxonomy()
+	{
 		$labels = array(
-			'name'                       => _x( 'Statuses', 'taxonomy general name' ),
-			'singular_name'              => _x( 'Status', 'taxonomy singular name' ),
-			'search_items'               => __( 'Search Statuses' ),
-			'popular_items'              => __( 'Popular Statuses' ),
-			'all_items'                  => __( 'All Statuses' ),
+			'name'                       => _x('Statuses', 'taxonomy general name'),
+			'singular_name'              => _x('Status', 'taxonomy singular name'),
+			'search_items'               => __('Search Statuses'),
+			'popular_items'              => __('Popular Statuses'),
+			'all_items'                  => __('All Statuses'),
 			'parent_item'                => null,
 			'parent_item_colon'          => null,
-			'edit_item'                  => __( 'Edit Status' ),
-			'update_item'                => __( 'Update Status' ),
-			'add_new_item'               => __( 'Add New Status' ),
-			'new_item_name'              => __( 'New Status Name' ),
-			'separate_items_with_commas' => __( 'Separate statuses with commas' ),
-			'add_or_remove_items'        => __( 'Add or remove statuses' ),
-			'choose_from_most_used'      => __( 'Choose from the most used statuses' ),
-			'menu_name'                  => __( 'Statuses' ),
+			'edit_item'                  => __('Edit Status'),
+			'update_item'                => __('Update Status'),
+			'add_new_item'               => __('Add New Status'),
+			'new_item_name'              => __('New Status Name'),
+			'separate_items_with_commas' => __('Separate statuses with commas'),
+			'add_or_remove_items'        => __('Add or remove statuses'),
+			'choose_from_most_used'      => __('Choose from the most used statuses'),
+			'menu_name'                  => __('Statuses'),
 		);
 
-		register_taxonomy( 'player-status', 'bt-players', array(
+		register_taxonomy('player-status', 'bt-players', array(
 			'hierarchical'      => false,
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'player-status' ),
-		) );
+			'rewrite'           => array('slug' => 'player-status'),
+		));
 	}
 
-	public function player_meta_box() {
+	public function player_meta_box()
+	{
 		add_meta_box(
 			'btm-player-meta_box',
 			'Player data',
-			array( $this, 'player_meta_box_callback' ),
-			array( 'bt-players' ),
+			array($this, 'player_meta_box_callback'),
+			array('bt-players'),
 			'advanced',
 			'high'
 		);
 	}
 
-	public function player_meta_box_callback( $post, $meta ) {
+	public function player_meta_box_callback($post, $meta)
+	{
 		$screens = $meta['args'];
-		wp_nonce_field( plugin_basename( __FILE__ ), 'bt_player_noncename' );
+		wp_nonce_field(plugin_basename(__FILE__), 'bt_player_noncename');
 
 		$playerData = array(
-			'player_name'             => get_post_meta( $post->ID, 'player_name', 1 ),
-			'player_position'         => get_post_meta( $post->ID, 'player_position', 1 ),
-			'player_number'           => get_post_meta( $post->ID, 'player_number', 1 ),
-			'player_status'           => get_post_meta( $post->ID, 'player_status', 1 ),
-			'player_total_games'      => get_post_meta( $post->ID, 'player_total_games', 1 ),
-			'player_total_points'     => get_post_meta( $post->ID, 'player_total_points', 1 ),
-			'player_total_3_pointers' => get_post_meta( $post->ID, 'player_total_3_pointers', 1 ),
-			'player_birthdate'        => get_post_meta( $post->ID, 'player_birthdate', 1 ),
-			'player_nationality'      => get_post_meta( $post->ID, 'player_nationality', 1 ),
-			'player_weight'           => get_post_meta( $post->ID, 'player_weight', 1 ),
-			'player_height'           => get_post_meta( $post->ID, 'player_height', 1 ),
+			'player_name'             => get_post_meta($post->ID, 'player_name', 1),
+			'player_position'         => get_post_meta($post->ID, 'player_position', 1),
+			'player_number'           => get_post_meta($post->ID, 'player_number', 1),
+			'player_status'           => get_post_meta($post->ID, 'player_status', 1),
+			'player_total_games'      => get_post_meta($post->ID, 'player_total_games', 1),
+			'player_total_points'     => get_post_meta($post->ID, 'player_total_points', 1),
+			'player_total_3_pointers' => get_post_meta($post->ID, 'player_total_3_pointers', 1),
+			'player_birthdate'        => get_post_meta($post->ID, 'player_birthdate', 1),
+			'player_nationality'      => get_post_meta($post->ID, 'player_nationality', 1),
+			'player_weight'           => get_post_meta($post->ID, 'player_weight', 1),
+			'player_height'           => get_post_meta($post->ID, 'player_height', 1),
 		);
+
+		$playerPositions = array();
+		$playerPositionsTaxonomies = get_the_terms($post->ID, 'player-position');
+		if (!empty($playerPositionsTaxonomies)) {
+			foreach ($playerPositionsTaxonomies as $taxonomy) {
+				array_push($playerPositions, $taxonomy->name);
+			}
+		}
+
+		$playerStatus = array();
+		$playerStatusTaxonomies = get_the_terms($post->ID, 'player-status');
+		if (!empty($playerStatusTaxonomies)) {
+			foreach ($playerStatusTaxonomies as $taxonomy) {
+				array_push($playerStatus, $taxonomy->name);
+			}
+		}
 
 		$positionTerms = get_terms(
 			array(
@@ -159,22 +181,24 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		);
 
 		ob_start();
-		include_once( BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php' );
-		player_data_form( $post, $this->plugin_name, $playerData, $positionTerms, $statusTerms );
+		include_once(BASKETBALL_TEAM_MANAGER_PLUGIN_PATH . 'admin/partials/player-data-form.php');
+		player_data_form($post, $this->plugin_name, $playerData, $positionTerms, $statusTerms, $playerPositions, $playerStatus);
 		$form = ob_get_contents();
 		ob_end_clean();
 
 		echo $form;
 	}
 
-	public function remove_player_meta_box_duplicate() {
+	public function remove_player_meta_box_duplicate()
+	{
 		global $post, $wp_meta_boxes;
-		unset( $wp_meta_boxes['bt-players']['advanced'] );
+		unset($wp_meta_boxes['bt-players']['advanced']);
 	}
 
-	public function save_players_data( $post_id ) {
+	public function save_players_data($post_id)
+	{
 		$post_type = $_POST['post_type'] ?? '';
-		if ( isset( $_POST ) and $post_type == 'bt-players' ) {
+		if (isset($_POST) and $post_type == 'bt-players') {
 			$playerData = array(
 				'player_name',
 				'player_position',
@@ -191,30 +215,43 @@ class Admin_Players_Posts extends Basketball_Team_Manager_Admin {
 		}
 
 		$noncename = $_POST['bt_player_noncename'] ?? '';
-		if ( ! wp_verify_nonce( $noncename, plugin_basename( __FILE__ ) ) ) {
+		if (!wp_verify_nonce($noncename, plugin_basename(__FILE__))) {
 			return;
 		}
 
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
 			return;
 		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		if (!current_user_can('edit_post', $post_id)) {
 			return;
 		}
 
-		foreach ( $playerData as $field ) {
-			update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+		foreach ($playerData as $field) {
+			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
 		}
 
-		$this->updatePostTaxonomySingle( $post_id, $_POST['player_position'], 'player-position' );
-		$this->updatePostTaxonomySingle( $post_id, $_POST['player_status'], 'player-status' );
+		$this->updatePostTaxonomyMultiple($post_id, $_POST['player_position'], 'player-position');
+		$this->updatePostTaxonomySingle($post_id, $_POST['player_status'], 'player-status');
 	}
 
-	private function updatePostTaxonomySingle( $post_id, $termData, $taxonomy ) {
-		$term = get_term( $termData, $taxonomy );
-		if ( isset( $term ) ) {
-			wp_set_object_terms( $post_id, $term->term_id, $taxonomy );
+	private function updatePostTaxonomySingle($post_id, $termData, $taxonomy)
+	{
+		$term = get_term($termData, $taxonomy);
+		if (isset($term)) {
+			wp_set_object_terms($post_id, $term->term_id, $taxonomy);
 		}
+	}
+
+	private function updatePostTaxonomyMultiple($post_id, $termData, $taxonomy)
+	{
+		$terms = array();
+		foreach ($termData as $term) {
+			$termName = get_term($term, $taxonomy);
+			if (isset($termName)) {
+				array_push($terms, $termName->name);
+			}
+		}
+		wp_set_object_terms($post_id, $terms, $taxonomy);
 	}
 }

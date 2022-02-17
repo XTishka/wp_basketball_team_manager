@@ -27,7 +27,8 @@
  * @subpackage Basketball_Team_Manager/includes
  * @author     Takhir Berdyiev <takhir.berdyiev@gmail.com>
  */
-class Basketball_Team_Manager {
+class Basketball_Team_Manager
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,8 +67,9 @@ class Basketball_Team_Manager {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
-		if ( defined( 'BASKETBALL_TEAM_MANAGER_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('BASKETBALL_TEAM_MANAGER_VERSION')) {
 			$this->version = BASKETBALL_TEAM_MANAGER_VERSION;
 		} else {
 			$this->version = '1.0.0';
@@ -78,7 +80,6 @@ class Basketball_Team_Manager {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -97,42 +98,45 @@ class Basketball_Team_Manager {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-basketball-team-manager-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-basketball-team-manager-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-basketball-team-manager-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-basketball-team-manager-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-basketball-team-manager-admin.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-game-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-games-index.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-players-index.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-staff-index.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-video-posts.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-filters.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-admin-taxonomy-field-image.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-basketball-team-manager-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-game-posts.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-games-index.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-players-posts.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-players-index.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-sponsors-posts.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-sponsors-index.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-staff-posts.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-staff-index.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-video-posts.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-filters.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-field-image.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/includes/class-admin-taxonomy-field-subcategory.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-basketball-team-manager-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-basketball-team-manager-public.php';
 
 		$this->loader = new Basketball_Team_Manager_Loader();
-
 	}
 
 	/**
@@ -144,12 +148,12 @@ class Basketball_Team_Manager {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Basketball_Team_Manager_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -159,146 +163,187 @@ class Basketball_Team_Manager {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
 		/**
 		 * Admin Common Hooks
 		 * */
-		$plugin_admin = new Basketball_Team_Manager_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Basketball_Team_Manager_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+
+		/**
+         * Composer
+         */
+         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/vendor/autoload.php';
+
+        /**
+         * Google Calendar
+         */
+         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-google-calendar-admin.php';
 
 		// Register settings menu
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_setting_menu' );
-
+		$this->loader->add_action('admin_menu', $plugin_admin, 'register_setting_menu');
+		$this->loader->add_action('admin_init', $plugin_admin, 'btm_register_option_settings');
 
 		/**
 		 * Admin Games hooks
 		 **/
-		$plugin_admin_game = new Admin_Game_Posts( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_game = new Admin_Game_Posts($this->get_plugin_name(), $this->get_version());
 
 		// Register game post type
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_games_posts' );
+		$this->loader->add_action('init', $plugin_admin_game, 'register_games_posts');
 
 		// Register games taxonomies
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_seasons_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tournaments_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_teams_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_arenas_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_tv_channels_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_game, 'register_sponsors_taxonomy' );
+		$this->loader->add_action('init', $plugin_admin_game, 'register_seasons_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_game, 'register_tournaments_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_game, 'register_teams_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_game, 'register_arenas_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_game, 'register_tv_channels_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_game, 'register_sponsors_taxonomy');
 
 		// Register metaboxes
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_game, 'game_meta_box' );
-		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_game, 'move_game_meta_box_to_the_top' );
+		$this->loader->add_action('add_meta_boxes', $plugin_admin_game, 'game_meta_box');
+		$this->loader->add_action('edit_form_after_title', $plugin_admin_game, 'move_game_meta_box_to_the_top');
 
 		// Save custom posts data
-		$this->loader->add_action( 'save_post', $plugin_admin_game, 'save_game_post' );
+		$this->loader->add_action('save_post', $plugin_admin_game, 'save_game_post');
 
 		// Taxonomy field Image
-		$gameTeamLogo = new Admin_Taxonomy_Field_Image( 'teams' );
+		$gameTeamLogo = new Admin_Taxonomy_Field_Image('teams');
 		$gameTeamLogo->init();
 
-		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image( 'tv_channels' );
+		$gameTVChannelLogo = new Admin_Taxonomy_Field_Image('tv_channels');
 		$gameTVChannelLogo->init();
 
-		$gameSponsorLogo = new Admin_Taxonomy_Field_Image( 'sponsors' );
+		$gameSponsorLogo = new Admin_Taxonomy_Field_Image('sponsors');
 		$gameSponsorLogo->init();
 
+		$gameTournamentsLogo = new Admin_Taxonomy_Field_Image( 'tournaments' );
+		$gameTournamentsLogo->init();
+
+		// Taxonomy field Subcategory
+		$gameSponsorCategory = new Admin_Taxonomy_Field_Subcategory('sponsors');
+		$gameSponsorCategory->init();
+
 		// All posts custom columns
-		$gameDateColumn = new Admin_Games_Index( $this->plugin_name );
+		$gameDateColumn = new Admin_Games_Index($this->plugin_name);
 		$gameDateColumn->init();
 
 		// Taxonomy filters
-		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'seasons' );
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'seasons');
 		$gameTournamentFilter->init();
 
-		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'tournaments' );
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'tournaments');
 		$gameTournamentFilter->init();
 
-		$gameTournamentFilter = new Admin_Taxonomy_Filters( 'bt-games', 'teams' );
+		$gameTournamentFilter = new Admin_Taxonomy_Filters('bt-games', 'teams');
 		$gameTournamentFilter->init();
 
 
 		/**
 		 * Admin Players hooks
 		 **/
-		$plugin_admin_player = new Admin_Players_Posts( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_player = new Admin_Players_Posts($this->get_plugin_name(), $this->get_version());
 
 		// Register player post type
-		$this->loader->add_action( 'init', $plugin_admin_player, 'register_players_posts' );
+		$this->loader->add_action('init', $plugin_admin_player, 'register_players_posts');
 		// Register players taxonomies
-		$this->loader->add_action( 'init', $plugin_admin_player, 'register_position_taxonomy' );
-		$this->loader->add_action( 'init', $plugin_admin_player, 'register_status_taxonomy' );
+		$this->loader->add_action('init', $plugin_admin_player, 'register_position_taxonomy');
+		$this->loader->add_action('init', $plugin_admin_player, 'register_status_taxonomy');
 
 		// Register metaboxes
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_player, 'player_meta_box' );
-		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_player, 'remove_player_meta_box_duplicate' );
+		$this->loader->add_action('add_meta_boxes', $plugin_admin_player, 'player_meta_box');
+		$this->loader->add_action('edit_form_after_title', $plugin_admin_player, 'remove_player_meta_box_duplicate');
 
 		// Save custom posts data
-		$this->loader->add_action( 'save_post', $plugin_admin_player, 'save_players_data' );
+		$this->loader->add_action('save_post', $plugin_admin_player, 'save_players_data');
 
 		// Taxonomy filters
-		$playerPositionFilter = new Admin_Taxonomy_Filters( 'bt-players', 'player-position' );
+		$playerPositionFilter = new Admin_Taxonomy_Filters('bt-players', 'player-position');
 		$playerPositionFilter->init();
 
-		$playerStatusFilter = new Admin_Taxonomy_Filters( 'bt-players', 'player-status' );
+		$playerStatusFilter = new Admin_Taxonomy_Filters('bt-players', 'player-status');
 		$playerStatusFilter->init();
 
 		// Players Index
-		$playersIndexColumns = new Admin_Players_Index( $this->plugin_name );
+		$playersIndexColumns = new Admin_Players_Index($this->plugin_name);
 		$playersIndexColumns->init();
 
 
 		/**
 		 * Admin Staff hooks
 		 **/
-		$plugin_admin_staff_member = new Admin_Staff_Posts( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_staff_member = new Admin_Staff_Posts($this->get_plugin_name(), $this->get_version());
 
 		// Register staff post type
-		$this->loader->add_action( 'init', $plugin_admin_staff_member, 'register_staff_posts' );
+		$this->loader->add_action('init', $plugin_admin_staff_member, 'register_staff_posts');
 
 		// Register staff taxonomies
-		$this->loader->add_action( 'init', $plugin_admin_staff_member, 'register_position_taxonomy' );
+		$this->loader->add_action('init', $plugin_admin_staff_member, 'register_position_taxonomy');
 
 		// Register metaboxes
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_staff_member, 'staff_member_meta_box' );
-		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_staff_member, 'remove_staff_member_meta_box_duplicate' );
+		$this->loader->add_action('add_meta_boxes', $plugin_admin_staff_member, 'staff_member_meta_box');
+		$this->loader->add_action('edit_form_after_title', $plugin_admin_staff_member, 'remove_staff_member_meta_box_duplicate');
 
 		// Save custom posts data
-		$this->loader->add_action( 'save_post', $plugin_admin_staff_member, 'save_staff_member_data' );
+		$this->loader->add_action('save_post', $plugin_admin_staff_member, 'save_staff_member_data');
 
 		// Taxonomy filters
-		$staffPositionFilter = new Admin_Taxonomy_Filters( 'bt-staff', 'staff-position' );
+		$staffPositionFilter = new Admin_Taxonomy_Filters('bt-staff', 'staff-position');
 		$staffPositionFilter->init();
 
 		// Staff Index
-		$staffIndexColumns = new Admin_Staff_Index( $this->plugin_name );
+		$staffIndexColumns = new Admin_Staff_Index($this->plugin_name);
 		$staffIndexColumns->init();
 
 
 		/**
 		 * Admin Video hooks
 		 **/
-		$plugin_admin_video = new Admin_Video_Posts( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin_video = new Admin_Video_Posts($this->get_plugin_name(), $this->get_version());
 
 		// Register video post type
-		$this->loader->add_action( 'init', $plugin_admin_video, 'register_video_posts' );
+		$this->loader->add_action('init', $plugin_admin_video, 'register_video_posts');
 
 		// Register video taxonomies
-		$this->loader->add_action( 'init', $plugin_admin_video, 'register_category_taxonomy' );
+		$this->loader->add_action('init', $plugin_admin_video, 'register_category_taxonomy');
 
 		// Save custom posts data
-		$this->loader->add_action( 'save_post', $plugin_admin_video, 'save_video_data' );
+		$this->loader->add_action('save_post', $plugin_admin_video, 'save_video_data');
 
 		// Register metaboxes
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_video, 'video_meta_box' );
-		$this->loader->add_action( 'edit_form_after_title', $plugin_admin_video, 'remove_video_meta_box_duplicate' );
+		$this->loader->add_action('add_meta_boxes', $plugin_admin_video, 'video_meta_box');
+		$this->loader->add_action('edit_form_after_title', $plugin_admin_video, 'remove_video_meta_box_duplicate');
 
 		// Taxonomy filters
-		$staffPositionFilter = new Admin_Taxonomy_Filters( 'bt-videos', 'video-category' );
+		$staffPositionFilter = new Admin_Taxonomy_Filters('bt-videos', 'video-category');
 		$staffPositionFilter->init();
+
+
+		/**
+		 * Admin Sponsors hooks
+		 **/
+		$plugin_admin_sponsors = new Admin_Sponsor_Posts($this->get_plugin_name(), $this->get_version());
+
+		// Register sponsors post type
+		$this->loader->add_action('init', $plugin_admin_sponsors, 'register_sponsor_posts');
+
+		// Register sponsors taxonomies
+		$this->loader->add_action('init', $plugin_admin_sponsors, 'register_category_taxonomy');
+
+		// Save custom posts data
+		$this->loader->add_action('save_post', $plugin_admin_sponsors, 'save_sponsor_data');
+
+		// Register metaboxes
+		$this->loader->add_action('add_meta_boxes', $plugin_admin_sponsors, 'sponsor_meta_box');
+		$this->loader->add_action('edit_form_after_title', $plugin_admin_sponsors, 'remove_sponsor_meta_box_duplicate');
+
+		// Sponsors Index
+		$sponsorsIndexColumns = new Admin_Sponsors_Index($this->plugin_name);
+		$sponsorsIndexColumns->init();
 	}
 
 	/**
@@ -308,13 +353,13 @@ class Basketball_Team_Manager {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Basketball_Team_Manager_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Basketball_Team_Manager_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 	}
 
 	/**
@@ -322,7 +367,8 @@ class Basketball_Team_Manager {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -333,7 +379,8 @@ class Basketball_Team_Manager {
 	 * @return    string    The name of the plugin.
 	 * @since     1.0.0
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -343,7 +390,8 @@ class Basketball_Team_Manager {
 	 * @return    Basketball_Team_Manager_Loader    Orchestrates the hooks of the plugin.
 	 * @since     1.0.0
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -353,8 +401,8 @@ class Basketball_Team_Manager {
 	 * @return    string    The version number of the plugin.
 	 * @since     1.0.0
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }

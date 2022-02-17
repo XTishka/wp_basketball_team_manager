@@ -133,6 +133,9 @@
 .player-wrapper .form select {
     width: 211px;
 }
+.player_position .selectize-control {
+    width: 200px;
+}
 
 .video-wrapper .row {
     margin: 10px 0;
@@ -146,6 +149,29 @@
 .video-wrapper .row input,
 .video-wrapper .row select {
     width: 70%;
+}
+.video-wrapper .row .selectize-control {
+    width: 70%;
+}
+
+.sponsor-wrapper .row {
+    margin: 10px 0;
+    display: flex;
+}
+.sponsor-wrapper .row label {
+    display: inline-block;
+    width: 10%;
+    font-weight: 700;
+}
+.sponsor-wrapper .row input,
+.sponsor-wrapper .row select {
+    width: 70%;
+}
+.sponsor-wrapper .row .selectize-control {
+    width: 70%;
+}
+#btm-sponsor-meta_box {
+    padding-bottom: 60px;
 }
 
 
