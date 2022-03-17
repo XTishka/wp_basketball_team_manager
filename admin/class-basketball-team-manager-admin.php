@@ -155,5 +155,6 @@ class Basketball_Team_Manager_Admin
 		register_setting( 'btm-settings-calendar-group', 'btm_post_to_google_calendar' );
 		register_setting( 'btm-settings-calendar-group', 'btm_google_calendar_id' );
 		register_setting( 'btm-settings-calendar-group', 'btm_google_calendar_time_zone' );
+		register_setting( 'btm-settings-calendar-group', 'btm_google_secret_key' );
 	}
 }

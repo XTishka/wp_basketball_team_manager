@@ -5,6 +5,11 @@ class GoogleCalendarAdmin {
 
 	public $calendarId = 'ko3k9ovgss83mtsggml7hl9pr4@group.calendar.google.com';
 
+	public function __construct() {
+		$this->timeZone = '';
+		$this->calendarId = '';
+	}
+
 	/**
 	 * Returns an authorized API client.
 	 * @return Google_Client the authorized client object

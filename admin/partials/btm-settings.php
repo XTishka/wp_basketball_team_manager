@@ -85,6 +85,16 @@
                             </p>
                         </td>
                     </tr>
+
+                    <tr>
+                        <th scope="row"><?php echo __('Secret key', $plugin_name) ?></th>
+                        <td>
+                            <input type="text" name="btm_google_secret_key" value="<?php echo esc_attr( get_option('btm_google_secret_key') ); ?>" />
+                            <p class="description">
+				                <?php echo __( 'You need cli to generate secret key', $plugin_name ); ?>
+                            </p>
+                        </td>
+                    </tr>
                 </table>
 
 				<?php submit_button(); ?>
