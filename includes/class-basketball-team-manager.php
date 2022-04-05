@@ -177,7 +177,7 @@ class Basketball_Team_Manager
 		/**
          * Composer
          */
-         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/vendor/autoload.php';
+         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
 
         /**
          * Google Calendar

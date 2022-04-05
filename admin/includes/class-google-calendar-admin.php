@@ -2,32 +2,26 @@
 
 class GoogleCalendarAdmin {
 	public $timeZone = 'Europe/Copenhagen';
-
-	public $calendarId = 'ko3k9ovgss83mtsggml7hl9pr4@group.calendar.google.com';
+	public $calendarId;
 
 	public function __construct() {
-		$this->timeZone = '';
-		$this->calendarId = '';
+		$this->timeZone   = esc_attr( get_option( 'btm_google_calendar_time_zone' ) );
+		$this->calendarId = esc_attr( get_option( 'btm_google_calendar_id' ) );
 	}
 
-	/**
-	 * Returns an authorized API client.
-	 * @return Google_Client the authorized client object
-	 */
-	public function getClient() {
+	public function getClient(): Google_Client {
 		$client = new Google_Client();
 		$client->setApplicationName( 'Google Calendar API PHP Quickstart' );
 		$client->setScopes( Google_Service_Calendar::CALENDAR_EVENTS );
-
-		$client->setAuthConfig( plugin_dir_path( __FILE__ ) . '../../includes/credentials.json' );
-		$client->setAccessType( 'online' );
+		$client->setAuthConfig( plugin_dir_path( dirname( __FILE__ ) ) . '../credentials.json' );
+		$client->setAccessType( 'offline' );
 		$client->setPrompt( 'select_account consent' );
 
 		// Load previously authorized token from a file, if it exists.
 		// The file token.json stores the user's access and refresh tokens, and is
 		// created automatically when the authorization flow completes for the first
 		// time.
-		$tokenPath = plugin_dir_path( __FILE__ ) . '../../includes/token.json';
+		$tokenPath = plugin_dir_path( dirname( __FILE__ ) ) . '../token.json';
 		if ( file_exists( $tokenPath ) ) {
 			$accessToken = json_decode( file_get_contents( $tokenPath ), true );
 			$client->setAccessToken( $accessToken );
@@ -64,130 +58,64 @@ class GoogleCalendarAdmin {
 		return $client;
 	}
 
-
-	public function createEvent( $data ) {
-		$client  = $this->getClient();
-		$service = new Google_Service_Calendar( $client );
-
-//		echo $this->getSummary( $data );
-//		echo '<br>';
-//		echo $this->getDescription( $data );
-//		echo '<br>';
-//		echo $this->getStartTime( $data );
-//		echo '<br>';
-//		echo $this->getEndTime( $data );
-
-		$event = new Google_Service_Calendar_Event( array(
-			'summary'     => $this->getSummary( $data ),
-			'description' => $this->getDescription( $data ),
+	public function createEvent( $postData ) {
+		$client     = $this->getClient();
+		$service    = new Google_Service_Calendar( $client );
+		$eventData = array(
+			'summary'     => $this->getSummary( $postData ),
+			'description' => $this->getDescription( $postData ),
 			'start'       => array(
-				'dateTime' => $this->getStartTime( $data ),
+				'dateTime' => $this->getStartTime( $postData ),
 				'timeZone' => $this->timeZone,
 			),
 			'end'         => array(
-				'dateTime' => $this->getEndTime( $data ),
+				'dateTime' => $this->getEndTime( $postData ),
 				'timeZone' => $this->timeZone,
 			),
-		) );
+		);
 
-		$event = new Google_Service_Calendar_Event(array(
-			'summary' => 'Google I/O 2015',
-			'location' => '800 Howard St., San Francisco, CA 94103',
-			'description' => 'A chance to hear more about Google\'s developer products.',
-			'start' => array(
-				'dateTime' => '2022-02-28T09:00:00-07:00',
-				'timeZone' => 'America/Los_Angeles',
-			),
-			'end' => array(
-				'dateTime' => '2022-02-28T17:00:00-07:00',
-				'timeZone' => 'America/Los_Angeles',
-			),
-			'recurrence' => array(
-				'RRULE:FREQ=DAILY;COUNT=2'
-			),
-			'attendees' => array(
-				array('email' => 'lpage@example.com'),
-				array('email' => 'sbrin@example.com'),
-			),
-			'reminders' => array(
-				'useDefault' => FALSE,
-				'overrides' => array(
-					array('method' => 'email', 'minutes' => 24 * 60),
-					array('method' => 'popup', 'minutes' => 10),
-				),
-			),
-		));
+		$serviceEvent = new Google_Service_Calendar_Event( $eventData );
+		$event = $service->events->insert($this->calendarId, $serviceEvent);
 
-//		echo '<pre>';
-//		print_r( $data );
-//		echo '</pre>';
-//
-//		echo '<pre>';
-//		print_r( $client );
-//		echo '</pre>';
-//
-//		wp_die( 'test' );
-
-		return $service->events->insert( $this->calendarId, $event );
-	}
-
-	public function updateEvent( $data ) {
-		$client  = $this->getClient();
-		$service = new Google_Service_Calendar( $client );
-
-		$event = $service->events->get( $this->calendarId, $data['calendar_event_id'] );
-		$event->setSummary( $this->getSummary( $data ) );
-		$event->setDescription( $this->getDescription( $data ) );
-
-		$Start = new Google_Service_Calendar_EventDateTime();
-		$Start->setDateTime( $this->getStartTime( $data ) );
-		$Start->setTimeZone( $this->timeZone );
-		$event->setStart( $Start );
-
-		$end = new Google_Service_Calendar_EventDateTime();
-		$end->setDateTime( $this->getEndTime( $data ) );
-		$end->setTimeZone( $this->timeZone );
-		$event->setEnd( $end );
-
-		$service->events->update( $this->calendarId, $event->getId(), $event );
-	}
-
-
-	public function editEvent( $data ) {
-		$client  = $this->getClient();
-		$service = new Google_Service_Calendar( $client );
-
-		$event = $service->events->get( 'primary', $data['calendar_event_id'] );
-		$event->setSummary( $this->getSummary( $data ) );
-		$event->setDescription( $this->getDescription( $data ) );
-
-		$Start = new Google_Service_Calendar_EventDateTime();
-		$Start->setDateTime( $this->getStartTime( $data ) );
-		$Start->setTimeZone( $this->timeZone );
-		$event->setStart( $Start );
-
-		$end = new Google_Service_Calendar_EventDateTime();
-		$end->setDateTime( $this->getEndTime( $data ) );
-		$end->setTimeZone( $this->timeZone );
-		$event->setEnd( $end );
-
-		$calendarId = 'primary';
-
-		if ( empty( $data['calendar_event_id'] ) ) {
-			$event = $service->events->insert( $calendarId, $event );
-		} else {
-			$service->events->update( $calendarId, $event->getId(), $event );
+		try {
+			$event = $service->events->insert($this->calendarId, $serviceEvent);
+		} catch (Exception $e) {
+			print "An error occurred: " . $e->getMessage();
 		}
 
-		return $event->id;
+		return $event;
 	}
 
-	public function deleteEvent( $eventId ) {
-		$client     = $this->getClient();
-		$calendarId = 'primary';
-		$service    = new Google_Service_Calendar( $client );
-		$service->events->delete( $calendarId, $eventId );
+	public function updateEvent($postData) {
+		$client = $this->getClient();
+		$service = new Google_Service_Calendar($client);
+
+		$event = $service->events->get($this->calendarId, $postData['game_calendar_event_id']);
+		$event->setSummary($this->getSummary($postData));
+		$event->setDescription($this->getDescription($postData));
+
+		$Start = new Google_Service_Calendar_EventDateTime();
+		$Start->setDateTime($this->getStartTime($postData));
+		$Start->setTimeZone($this->timeZone);
+		$event->setStart($Start);
+
+		$end = new Google_Service_Calendar_EventDateTime();
+		$end->setDateTime($this->getEndTime($postData));
+		$end->setTimeZone($this->timeZone);
+		$event->setEnd($end);
+
+		$service->events->update($this->calendarId, $event->getId(), $event);
+
+		return $event;
 	}
+
+//	public function deleteEvent($postData)
+//	{
+//		wp_die('delete');
+//		$client = $this->getClient();
+//		$service = new Google_Service_Calendar($client);
+//		$service->events->delete($this->calendarId, $postData['game_calendar_event_id']);
+//	}
 
 	private function getStartTime( $data ) {
 		return $data['game_date'] . 'T' . $data['game_time'] . ':00+01:00';
@@ -201,10 +129,12 @@ class GoogleCalendarAdmin {
 	}
 
 	private function getSummary( $data ) {
+		$homeTeam = get_term( $data['taxonomy_game_home_team'], 'teams' );
+		$guestTeam = get_term( $data['taxonomy_game_guest_team'], 'teams' );
 		if ( empty( $data['game_home_team_score'] ) or empty( $data['game_guest_team_score'] ) ) {
-			$summary = "$data[taxonomy_game_home_team] - $data[taxonomy_game_guest_team]";
+			$summary = "$homeTeam->name - $guestTeam->name";
 		} else {
-			$summary = "$data[taxonomy_game_home_team] ($data[game_home_team_score]) -  $data[taxonomy_game_guest_team] ($data[game_guest_team_score])";
+			$summary = "$homeTeam->name ($data[game_home_team_score]) - $guestTeam->name ($data[game_guest_team_score])";
 		}
 
 		return $summary;
