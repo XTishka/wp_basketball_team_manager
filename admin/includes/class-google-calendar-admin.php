@@ -75,7 +75,6 @@ class GoogleCalendarAdmin {
 		);
 
 		$serviceEvent = new Google_Service_Calendar_Event( $eventData );
-		$event = $service->events->insert($this->calendarId, $serviceEvent);
 
 		try {
 			$event = $service->events->insert($this->calendarId, $serviceEvent);
