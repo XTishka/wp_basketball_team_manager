@@ -76,7 +76,7 @@ class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 		register_taxonomy('sponsor-category', 'bt-sponsors', array(
 			'hierarchical'      => true,
 			'labels'            => $labels,
-			'show_ui'           => true,
+			'show_ui'           => false,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
@@ -165,7 +165,7 @@ class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 			update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
 		}
 
-		$this->updatePostTaxonomySingle($post_id, $_POST['sponsors_category'], 'sponsor-category');
+		$this->updatePostTaxonomyMultiple($post_id, $_POST['sponsors_category'], 'sponsor-category');
 	}
 
 	private function updatePostTaxonomySingle($post_id, $termData, $taxonomy)
@@ -174,5 +174,17 @@ class Admin_Sponsor_Posts extends Basketball_Team_Manager_Admin
 		if (isset($term)) {
 			wp_set_object_terms($post_id, $term->term_id, $taxonomy);
 		}
+	}
+
+	private function updatePostTaxonomyMultiple($post_id, $termData, $taxonomy)
+	{
+		$terms = array();
+		foreach ($termData as $term) {
+			$termName = get_term($term, $taxonomy);
+			if (isset($termName)) {
+				array_push($terms, $termName->name);
+			}
+		}
+		wp_set_object_terms($post_id, $terms, $taxonomy);
 	}
 }

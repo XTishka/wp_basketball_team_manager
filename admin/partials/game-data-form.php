@@ -150,16 +150,26 @@ function game_data_form( $gameData, $plugin_name, $teamsTerms, $arenasTerms, $se
         </div>
     </div>
 
-    <script>
-        jQuery('#game_date').datetimepicker({
-            timepicker: false,
-            format: 'Y-m-d'
-        });
+    <div class="game-row">
+        <div class="calendar-row">
+            <div>
+                <label for="game_calendar_event_id"><?php echo __( "Google Calendar Event ID", $plugin_name ); ?></label>
+                <input type="text" id="game_calendar_event_id" name="game_calendar_event_id"
+                       value="<?php echo $gameData['calendar_event_id']; ?>" size="25"/>
+            </div>
+        </div>
+    </div>
 
-        jQuery('#game_time').datetimepicker({
-            datepicker: false,
-            format: 'H:i'
-        });
+    <script>
+        // jQuery('#game_date').datetimepicker({
+        //     timepicker: false,
+        //     format: 'Y-m-d'
+        // });
+        //
+        // jQuery('#game_time').datetimepicker({
+        //     datepicker: false,
+        //     format: 'H:i'
+        // });
     </script>
 
 	<?php

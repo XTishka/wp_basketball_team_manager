@@ -25,14 +25,14 @@
         $("#sponsors_category").selectize({
             create: true,
             sortField: "text",
-            maxOptions: 3
+            delimiter: '/'
         });
-
-        $("#sponsors_category").selectize({
-            create: true,
-            sortField: "text",
-            maxOptions: 3
-        });
+        
+        // $("#sponsors_category").selectize({
+        //     create: true,
+        //     sortField: "text",
+        //     maxOptions: 3
+        // });
 
         $("#player_position").selectize({
             create: true,

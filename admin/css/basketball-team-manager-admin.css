@@ -173,6 +173,9 @@
 #btm-sponsor-meta_box {
     padding-bottom: 60px;
 }
+#btm-sponsor-meta_box .video-category {
+    position: initial;
+}
 
 
     /* Players table */
